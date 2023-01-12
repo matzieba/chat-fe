@@ -1,4 +1,5 @@
 import { camelCase, snakeCase } from 'lodash';
+import { isDateString } from './date';
 
 export const isObjectEmpty = (value: any) => {
   if (typeof value === 'object') {
@@ -40,6 +41,10 @@ const processObjectKeyValue = (value: any, func: (value: any) => any): any => {
 
   if (typeof value === 'object') {
     return func(value);
+  }
+
+  if (isDateString(value)) {
+    return new Date(value);
   }
 
   return value;
