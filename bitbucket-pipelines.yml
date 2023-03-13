@@ -1,0 +1,87 @@
+image: node:18.0.0
+definitions:
+  steps:
+    - step: &install_dependencies
+        name: Install Dependencies
+        script:
+          - yarn install --network-timeout 500000
+        caches:
+          - node
+        artifacts:
+          - node_modules/**
+    - step: &enforce_code_standards
+        name: Enforce Code Standards
+        script:
+          - yarn lint
+          - yarn ts
+        caches:
+          - node
+        artifacts:
+          - node_modules/**
+    - step: &test_unit
+        name: Run Unit Tests
+        script:
+          - yarn test
+        caches:
+          - node
+        artifacts:
+          - node_modules/**
+    - step: &build_beta
+        size: 2x
+        caches:
+          - node
+        name: Build app
+        script:
+          - cp .env.beta .env
+          - yarn build
+        artifacts:
+          - dist/**
+          - node_modules/**
+    - step: &build_prod
+        size: 2x
+        caches:
+          - node
+        name: Build app
+        script:
+          - cp .env.beta .env
+          - yarn build
+        artifacts:
+          - dist/**
+          - node_modules/**
+pipelines:
+  default:
+    - step: *install_dependencies
+    - step: *enforce_code_standards
+  tags:
+    release-*:
+      - step: *install_dependencies
+      - step: *build_beta
+      - step:
+          name: Deploy to Firebase Beta
+          deployment: staging
+          script:
+            - pipe: atlassian/firebase-deploy:3.0.0
+              variables:
+                FIREBASE_TOKEN: $BETA_FIREBASE_TOKEN
+                PROJECT_ID: $BETA_FIREBASE_PROJECT
+      - step: *build_prod
+      - step:
+          trigger: manual
+          name: Deploy to Firebase Prod
+          deployment: production
+          script:
+            - pipe: atlassian/firebase-deploy:3.0.0
+              variables:
+                FIREBASE_TOKEN: $PROD_FIREBASE_TOKEN
+                PROJECT_ID: $PROD_FIREBASE_PROJECT
+    hotfix-*:
+      - step: *install_dependencies
+      - step: *build_prod
+      - step:
+          name: Deploy to Firebase Prod
+          deployment: production
+          script:
+            - pipe: atlassian/firebase-deploy:3.0.0
+              variables:
+                FIREBASE_TOKEN: $PROD_FIREBASE_TOKEN
+                PROJECT_ID: $PROD_FIREBASE_PROJECT
