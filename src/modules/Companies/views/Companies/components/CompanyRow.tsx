@@ -43,38 +43,40 @@ export const CompanyRow: React.FC<Companies.Company> = (company) => {
         <Typography variant="subtitle2">{company.createdAt.toISOString()}</Typography>
       </TableCell>
       <TableCell align="right">
-        <IconButtonDropdown
-          placement="bottom-start"
-          buttonProps={{
-            color: 'secondary',
-          }}
-          content={({ closeDropdown }) => (
-            <MenuList>
-              {permissions.companies.edit && (
-                <MenuItem
-                  onClick={() => {
-                    navigate(routes.companies.edit(company.id));
-                    closeDropdown();
-                  }}
-                >
-                  {dictionary.users.edit.buttonEdit}
-                </MenuItem>
-              )}
-              {permissions.companies.delete && (
-                <MenuItem
-                  onClick={() => {
-                    onDelete();
-                    closeDropdown();
-                  }}
-                >
-                  {dictionary.companies.edit.buttonDelete}
-                </MenuItem>
-              )}
-            </MenuList>
-          )}
-        >
-          <MoreVert/>
-        </IconButtonDropdown>
+        {(permissions.companies.edit || permissions.companies.delete) && (
+          <IconButtonDropdown
+            placement="bottom-start"
+            buttonProps={{
+              color: 'secondary',
+            }}
+            content={({ closeDropdown }) => (
+              <MenuList>
+                {permissions.companies.edit && (
+                  <MenuItem
+                    onClick={() => {
+                      navigate(routes.companies.edit(company.id));
+                      closeDropdown();
+                    }}
+                  >
+                    {dictionary.users.edit.buttonEdit}
+                  </MenuItem>
+                )}
+                {permissions.companies.delete && (
+                  <MenuItem
+                    onClick={() => {
+                      onDelete();
+                      closeDropdown();
+                    }}
+                  >
+                    {dictionary.companies.edit.buttonDelete}
+                  </MenuItem>
+                )}
+              </MenuList>
+            )}
+          >
+            <MoreVert/>
+          </IconButtonDropdown>
+        )}
       </TableCell>
     </TableRow>
   );

@@ -42,38 +42,40 @@ export const UserRow: React.FC<Users.User> = (user) => {
         <Typography variant="subtitle2">{user.email}</Typography>
       </TableCell>
       <TableCell align="right">
-        <IconButtonDropdown
-          placement="bottom-start"
-          buttonProps={{
-            color: 'secondary',
-          }}
-          content={({ closeDropdown }) => (
-            <MenuList>
-              {permissions.users.edit && (
-                <MenuItem
-                  onClick={() => {
-                    navigate(routes.users.edit(user.id));
-                    closeDropdown();
-                  }}
-                >
-                  {dictionary.users.edit.buttonEdit}
-                </MenuItem>
-              )}
-              {permissions.users.delete && (
-                <MenuItem
-                  onClick={() => {
-                    onDelete();
-                    closeDropdown();
-                  }}
-                >
-                  {dictionary.users.edit.buttonDelete}
-                </MenuItem>
-              )}
-            </MenuList>
-          )}
-        >
-          <MoreVert/>
-        </IconButtonDropdown>
+        {(permissions.users.edit || permissions.users.delete) && (
+          <IconButtonDropdown
+            placement="bottom-start"
+            buttonProps={{
+              color: 'secondary',
+            }}
+            content={({ closeDropdown }) => (
+              <MenuList>
+                {permissions.users.edit && (
+                  <MenuItem
+                    onClick={() => {
+                      navigate(routes.users.edit(user.id));
+                      closeDropdown();
+                    }}
+                  >
+                    {dictionary.users.edit.buttonEdit}
+                  </MenuItem>
+                )}
+                {permissions.users.delete && (
+                  <MenuItem
+                    onClick={() => {
+                      onDelete();
+                      closeDropdown();
+                    }}
+                  >
+                    {dictionary.users.edit.buttonDelete}
+                  </MenuItem>
+                )}
+              </MenuList>
+            )}
+          >
+            <MoreVert/>
+          </IconButtonDropdown>
+        )}
       </TableCell>
     </TableRow>
   );
