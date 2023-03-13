@@ -23,8 +23,12 @@ export type FakeAbstractRequest = (props: {
   response: any;
 }) => Promise<AxiosResponse>;
 
-const attachOptions = async (options: RequestOptions, authenticate: boolean): Promise<RequestOptions> => {
-  const token = await firebaseClient.getAuth().currentUser?.getIdToken();
+export const attachOptions = async (options: RequestOptions, authenticate: boolean): Promise<RequestOptions> => {
+  let token: CVT.Maybe<string>;
+
+  if (authenticate) {
+    token = await firebaseClient.getAuth().currentUser?.getIdToken();
+  }
   const selectedLanguage = typeof localStorage !== 'undefined' ? localStorage.getItem('mi-language') || 'en' : 'en';
 
   return {

@@ -25,7 +25,7 @@ export const getFileType = (mime: string): CVT.MaybeNull<CVT.File.FileType> => {
 
 export const bytesToMb = (bytes: number) => bytes / (1024*1024);
 
-const ExtMimeMap = {
+export const ExtMimeMap = {
   'jpg': 'image/jpeg',
   'jpeg': 'image/jpeg',
   'png': 'image/png',
