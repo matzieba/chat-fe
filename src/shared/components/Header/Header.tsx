@@ -45,7 +45,7 @@ export const Header: React.FC<Props> = ({ onNavigationClickRequest }) => {
           </IconButton>
         </Hidden>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Empty Water
+          {config.projectName}
         </Typography>
 
         <Stack flexGrow={0} direction="row" spacing={2}>

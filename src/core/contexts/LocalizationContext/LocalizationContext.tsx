@@ -5,7 +5,7 @@ import config from '@shared/config';
 
 import { ContextProps } from './LocalizationContext.types';
 
-const localStorageKey = `${process.env.REACT_APP_CVT_PROJECT_KEY}-language`;
+const localStorageKey = `${import.meta.env.VITE__CVT_PROJECT_KEY}-language`;
 
 const defaultContext: ContextProps = {
   language: config.language.defaultLanguage,

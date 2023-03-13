@@ -5,7 +5,7 @@ import { snakizeObject } from '@cvt/helpers/object';
 
 import { mapUserData } from './authClient.formatter';
 
-const authApiBaseUrl = process.env.REACT_APP_CVT_API_URL;
+const authApiBaseUrl = import.meta.env.VITE__CVT_API_URL;
 
 const signupWithEmailAndPassword = (data: Auth.SignupWithEmailAndPassword) => {
   return request({

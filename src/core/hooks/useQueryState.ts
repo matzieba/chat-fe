@@ -7,7 +7,7 @@ import { addQuery, parseQuery } from '@cvt/helpers/query';
 export const useQueryState = <T = string>(name: string, defaultValue?: T): [CVT.Maybe<T>, (value?: CVT.MaybeNull<T>) => void] => {
   const navigate = useNavigate();
   const location = useLocation();
-  const value = useMemo(() => parseQuery(location.search)[name] as unknown, [location.search, name]);
+  const value = useMemo(() => parseQuery(location.search)[name] as CVT.Maybe<T>, [location.search, name]);
 
   const setValue = useCallback((value?: CVT.MaybeNull<T>) => {
     navigate({
@@ -28,7 +28,7 @@ export const useQueryState = <T = string>(name: string, defaultValue?: T): [CVT.
   });
 
   return [
-    Array.isArray(value) ? value[0] : value,
+    value,
     setValue,
   ];
 };

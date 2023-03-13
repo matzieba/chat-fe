@@ -49,10 +49,12 @@ export const navigation = (dictionary: Dictionary): CVT.Navigation.Config => ({
     icon: <People />,
     text: dictionary.menu.user.team,
     route: routes.user.team,
+    permission: 'users.view',
     children: [{
       icon: <Add />,
       text: dictionary.menu.user.create,
       route: routes.user.create,
+      permission: 'users.create',
     }],
   }],
 });

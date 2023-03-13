@@ -25,7 +25,7 @@ declare namespace Auth {
 
 declare namespace Users {
 
-  export type Type = 'manager' | 'staff' | 'admin';
+  export type Type = 'customer' | 'admin';
 
   export interface User {
     type: Type;

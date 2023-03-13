@@ -5,7 +5,7 @@ import { camelizeObject, snakizeObject } from '@cvt/helpers/object';
 
 import { mapUserCrudData, mapUserData } from './userClient.formatter';
 
-const usersApiBaseUrl = process.env.REACT_APP_CVT_API_URL;
+const usersApiBaseUrl = import.meta.env.VITE__CVT_API_URL;
 
 const getUser = (params: { id: number | string }): Promise<AxiosResponse<Users.User>> => {
   return request({

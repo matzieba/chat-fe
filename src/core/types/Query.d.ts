@@ -2,7 +2,7 @@ declare namespace CVT {
   export namespace Query {
     type BaseGetListParams = {
       limit: number;
-      page: number;
+      offset: number;
     };
     
     export type GetListParams<T> = Partial<BaseGetListParams & T>;

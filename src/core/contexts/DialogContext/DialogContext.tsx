@@ -14,6 +14,7 @@ const defaultContext: ContextProps = {
   openDialog: () => {},
   closeDialog: () => {},
   asyncConfirmation: () => Promise.resolve(false),
+  dialogOptions: {},
 };
 
 const defaultAsyncConfirmationDialog = {
@@ -31,7 +32,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({ children }) 
   const { dictionary } = React.useContext(LocalizationContext);
 
   const [queryDialogs = [], setDialogs] = useQueryState<CVT.Dialogs.Dialog[]>('dialog');
-  const [dialogOptions, setDialogOptions] = React.useState<Partial<Record<CVT.Dialogs.Dialog, CVT.Dialogs.Options>>>();
+  const [dialogOptions, setDialogOptions] = React.useState<Partial<Record<CVT.Dialogs.Dialog, CVT.Dialogs.Options>>>({});
 
   const dialogs: string[] = React.useMemo(() => {
     return typeof queryDialogs === 'string' ? [queryDialogs] : queryDialogs;
@@ -89,6 +90,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         openDialog,
         closeDialog,
         asyncConfirmation,
+        dialogOptions,
       }}
     >
       {children}

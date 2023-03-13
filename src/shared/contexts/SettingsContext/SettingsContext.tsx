@@ -4,7 +4,7 @@ import config from '@shared/config';
 
 import { ContextProps } from './SettingsContext.types';
 
-const localStorageKey = `${process.env.REACT_APP_CVT_PROJECT_KEY}-theme-mode`;
+const localStorageKey = `${import.meta.env.VITE__CVT_PROJECT_KEY}-theme-mode`;
 
 const defaultContext: ContextProps = {
   drawerWidth: config.theme.drawerWidth,

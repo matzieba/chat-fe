@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Collapse, Divider, Drawer, IconButton, List,  ListItemButton, ListItemButtonProps, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar } from '@mui/material';
 
-import { LocalizationContext } from '@cvt/contexts';
+import { LocalizationContext, PermissionContext } from '@cvt/contexts';
 import { NavLink } from '@cvt/components/NavLink';
 
 import config from '@shared/config';
@@ -25,6 +25,16 @@ type Props = React.PropsWithChildren<{
 const NavigationItem: React.FC<NavigationItemProps> = ({ item, onCloseRequest, ListItemButtonProps }) => {
   const [open, setOpen] = React.useState(false);
 
+  const { getPermission } = React.useContext(PermissionContext);
+
+  const canView = React.useMemo(() => {
+    return item.permission ? getPermission(item.permission) : true;
+  }, [item, getPermission]);
+
+  const allowedChildren = React.useMemo(() => {
+    return item.children?.filter(it => it.permission ? getPermission(it.permission) : true);
+  }, [item, getPermission]);
+
   const handleClick = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
@@ -33,9 +43,9 @@ const NavigationItem: React.FC<NavigationItemProps> = ({ item, onCloseRequest, L
 
   const itemContent = (
     <React.Fragment>
-      {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+      {item.icon && <ListItemIcon sx={{ marginLeft:1.5 }}>{item.icon}</ListItemIcon>}
       <ListItemText primary={item.text} secondary={item.secondaryText} />
-      {item.children && (
+      {allowedChildren && allowedChildren.length > 0 && (
         <IconButton onClick={handleClick} size="small">
           {open ? <ExpandLess /> : <ExpandMore />}
         </IconButton>
@@ -44,10 +54,10 @@ const NavigationItem: React.FC<NavigationItemProps> = ({ item, onCloseRequest, L
   );
   const itemChildren = (
     <React.Fragment>
-      {item.children && (
+      {allowedChildren && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {item.children.map((child, idx) => (
+            {allowedChildren.map((child, idx) => (
               <NavigationItem
                 key={idx}
                 item={child}
@@ -65,6 +75,9 @@ const NavigationItem: React.FC<NavigationItemProps> = ({ item, onCloseRequest, L
     </React.Fragment>
   );
 
+  if (!canView) {
+    return null;
+  }
   if (item.divider) {
     return <Divider/>;
   }
@@ -76,6 +89,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({ item, onCloseRequest, L
           component={NavLink}
           to={item.route}
           onClick={onCloseRequest}
+          disabled={item.disabled}
         >
           {itemContent}
         </ListItemButton>
@@ -88,6 +102,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({ item, onCloseRequest, L
       <React.Fragment>
         <ListItemButton
           {...ListItemButtonProps}
+          disabled={item.disabled}
           onClick={() => [item.onClick && item.onClick(), onCloseRequest()]}
         >
           {itemContent}
@@ -120,10 +135,10 @@ export const NavigationSidebar: React.FC<Props> = ({ open, onOpenRequest, onClos
       <Toolbar />
       <List>
         <Authenticated>
-          {authenticatedNavRoutes.map((item, idx) => <NavigationItem key={idx} item={item} onCloseRequest={onCloseRequest} />)}
+          {authenticatedNavRoutes.map((item, idx) => <NavigationItem key={idx} item={item} onCloseRequest={onCloseRequest} ListItemButtonProps={{ sx: { my: 1 } }} />)}
         </Authenticated>
         <NotAuthenticated>
-          {notAuthenticatedNavRoutes.map((item, idx) => <NavigationItem key={idx} item={item} onCloseRequest={onCloseRequest} />)}
+          {notAuthenticatedNavRoutes.map((item, idx) => <NavigationItem key={idx} item={item} onCloseRequest={onCloseRequest} ListItemButtonProps={{ sx: { my: 1 } }} />)}
         </NotAuthenticated>
       </List>
     </React.Fragment>
@@ -145,18 +160,28 @@ export const NavigationSidebar: React.FC<Props> = ({ open, onOpenRequest, onClos
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.
         }}
+        PaperProps={{
+          sx: {
+            boxSizing: 'border-box',
+            width: config.theme.drawerWidth,
+          },
+        }}
         sx={{
           display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: config.theme.drawerWidth },
         }}
       >
         {drawer}
       </SwipeableDrawer>
       <Drawer
         variant="permanent"
+        PaperProps={{
+          sx: {
+            boxSizing: 'border-box',
+            width: config.theme.drawerWidth,
+          },
+        }}
         sx={{
           display: { xs: 'none', sm: 'block' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: config.theme.drawerWidth },
         }}
         open
       >

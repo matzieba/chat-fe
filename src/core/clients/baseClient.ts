@@ -1,9 +1,11 @@
 // ** External Imports
 import axiosRequest, { AxiosResponse, AxiosRequestConfig } from 'axios';
 
+import { timeout } from '../helpers/timeout';
+
 import { firebaseClient } from './firebaseClient';
 
-type RequestOptions =Omit<AxiosRequestConfig, 'url'> & {
+type RequestOptions = Omit<AxiosRequestConfig, 'url'> & {
   url: string;
 };
 
@@ -58,19 +60,22 @@ export const request: AbstractRequest = async ({ options, authenticate = true, m
   });
 };
 
-export const fakeRequest: FakeAbstractRequest = async ({ response }): Promise<AxiosResponse> => {
-  if (response.status === 200) {
+export const fakeRequest: FakeAbstractRequest = async ({ response: { status = 200, timeout: timeoutMs = 0, data = {} } }): Promise<AxiosResponse> => {
+  await timeout(timeoutMs);
+
+  if (status === 200) {
+    // @ts-ignore
     return Promise.resolve({
-      status: response.status,
-      data: response.data,
+      status,
+      data,
       statusText: 'success',
       headers: {},
       config: {},
     });
   } else {
     return Promise.reject({
-      status: response.status,
-      data: response.data,
+      status,
+      data,
       statusText: 'error',
       headers: {},
       config: {},

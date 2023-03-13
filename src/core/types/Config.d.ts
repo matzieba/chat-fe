@@ -1,5 +1,6 @@
 declare namespace CVT {
   export interface Config {
+    projectName: string;
     featureFlags: React<string, boolean>;
     theme: {
       defaultMode: PaletteMode;

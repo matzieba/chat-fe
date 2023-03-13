@@ -16,7 +16,7 @@ declare namespace CVT {
   export type CamelToSnakeCase<T> = T extends readonly any[] ?
     { [K in keyof T]: CamelToSnakeCase<T[K]> } :
     T extends object ? {
-      [K in keyof T as CamelToSnake<Extract<K, string>>]: CamelToSnakeCase<T[K]>
+      [K in keyof T as CamelToSnake<Extract<K, string>>]: T[K] extends Date ? string : CamelToSnakeCase<T[K]>
     } : T
 
   type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,

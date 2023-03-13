@@ -1,4 +1,4 @@
-import { Dictionary } from "@shared/dictionary";
+import { Dictionary } from '@shared/dictionary';
 
 export type ContextProps = {
   language: CVT.Language.SupportedLanguages;

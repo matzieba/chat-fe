@@ -1,14 +1,20 @@
+import { defineConfig } from 'vite'
 import path from 'path';
+import react from '@vitejs/plugin-react'
 
-const config = {
-  webpack: {
-    alias: {
+// https://vitejs.dev/config/
+export default defineConfig({
+  publicDir: 'public/',
+  resolve:{
+    alias:{
       '@cvt': path.resolve(__dirname, 'src/core'),
       '@shared': path.resolve(__dirname, 'src/shared'),
       '@modules': path.resolve(__dirname, 'src/modules'),
       '@pages': path.resolve(__dirname, 'src/pages'),
     },
   },
-};
-
-export default config;
+  plugins: [react()],
+  server: {
+    port: 3000,
+  },
+})

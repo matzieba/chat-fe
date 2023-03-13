@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React from 'react';
 import { Grid, Typography } from '@mui/material';
 
 import { LocalizationContext } from '@cvt/contexts';
@@ -7,7 +7,7 @@ type Props = {
   message?: string;
   height?: string | number;
 }
-export const MessageFeedbackView: FC<Props> = ({ message, height = '100%' }) => {
+export const MessageFeedbackView: React.FC<Props> = ({ message, height = '100%' }) => {
 
   const { dictionary } = React.useContext(LocalizationContext);
 

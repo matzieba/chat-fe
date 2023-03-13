@@ -2,6 +2,7 @@ import en from './languages/en';
 import de from './languages/de';
 
 const config: CVT.Config = {
+  projectName: 'Cookie Cutter',
   featureFlags: {
     googleSSO: true,
     microsoftSSO: true,
@@ -30,10 +31,10 @@ const config: CVT.Config = {
   },
   defaultPermissions: {
     users: {
-      view: true,
-      create: true,
-      edit: true,
-      delete: true,
+      view: false,
+      create: false,
+      edit: false,
+      delete: false,
       invite: true,
     },
   },
