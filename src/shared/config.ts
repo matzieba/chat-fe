@@ -31,11 +31,19 @@ const config: CVT.Config = {
   },
   defaultPermissions: {
     users: {
-      view: false,
+      list: false,
+      view: true,
       create: false,
       edit: false,
       delete: false,
       invite: true,
+    },
+    companies: {
+      list: true,
+      view: true,
+      create: false,
+      edit: false,
+      delete: false,
     },
   },
   dialogs: ['inviteTeamMember'],

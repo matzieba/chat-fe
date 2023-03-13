@@ -14,7 +14,15 @@ export const defaultContext: ContextProps = {
   isCustomer: false,
 };
 
-const adminPermissionList: CVT.Permission.PermissionKey[] = ['users.view', 'users.create', 'users.edit', 'users.delete'];
+const adminPermissionList: CVT.Permission.PermissionKey[] = [
+  'users.list',
+  'users.create',
+  'users.edit',
+  'users.delete',
+  'companies.create',
+  'companies.edit',
+  'companies.delete',
+];
 
 export const UserContext = React.createContext(defaultContext);
 

@@ -82,7 +82,7 @@ export const UserMenu: React.FC<Props> = ({ children, anchorEl, onCloseRequest }
       >
         <Authenticated>
           {user && (
-            <MenuItem onClick={() => [navigate(routes.user.myAccount), onCloseRequest()]}>
+            <MenuItem onClick={() => [navigate(routes.users.myAccount), onCloseRequest()]}>
               <ListItemText primary={user.displayName} secondary={user.email} />
             </MenuItem>
           )}

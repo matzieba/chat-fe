@@ -1,6 +1,6 @@
 import React from 'react';
-import { useForm, Controller, FieldError } from 'react-hook-form';
-import { Autocomplete, Box, FormControlLabel, Grid, InputAdornment, MenuItem, MenuList, Switch, TextField, Typography } from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import { Box, Grid, InputAdornment, MenuItem, MenuList, TextField, Typography } from '@mui/material';
 import { ArrowDropDown, ArrowDropUp, Business, Group, Groups, Mail, Person, Phone, Save, Work } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 
@@ -8,7 +8,7 @@ import { LocalizationContext } from '@cvt/contexts';
 import { emailRegex, phoneRegex } from '@cvt/helpers/validation';
 import { ButtonDropdown } from '@cvt/components/ButtonDropdown';
 
-// import { useCompanies } from 'modules/Companies/hooks/useCompanies';
+import { CompanyAutocomplete } from '@modules/Companies/components/CompanyAutocomplete';
 
 import { UserType } from '../enums';
 import { UserContext } from '../contexts';
@@ -34,8 +34,8 @@ const DEFAULT_VALUES: Partial<Users.Crud> = {
   type: UserType.Customer,
   firstName: '',
   lastName: '',
-  // company: null,
-  // jobTitle: '',
+  company: null,
+  jobTitle: '',
   email: '',
 };
 
@@ -43,8 +43,8 @@ export const UserForm: React.FC<Props> = ({ defaultValues = {}, onSubmitRequest,
 
   const { isAdmin } = React.useContext(UserContext);
   const { dictionary } = React.useContext(LocalizationContext);
-  // const { companies } = useCompanies({}, { enabled: isAdmin });
-  const { handleSubmit, control, formState: { isSubmitting, errors }, watch, setValue } = useForm<Users.Crud>({
+
+  const { handleSubmit, control, formState: { isSubmitting, errors }, watch } = useForm<Users.Crud>({
     defaultValues: {
       ...DEFAULT_VALUES,
       ...defaultValues,
@@ -152,12 +152,12 @@ export const UserForm: React.FC<Props> = ({ defaultValues = {}, onSubmitRequest,
               name="firstName"
               control={control}
               rules={{ required: dictionary.forms.validations.required }}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <TextField
                   {...field}
                   label={dictionary.forms.user.fieldName}
-                  error={!!errors.firstName}
-                  helperText={errors.firstName?.message}
+                  error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
                   InputProps={{
                     startAdornment: <InputAdornment position="start"><Box ml={1} component={Person}/></InputAdornment>,
                   }}
@@ -173,12 +173,12 @@ export const UserForm: React.FC<Props> = ({ defaultValues = {}, onSubmitRequest,
               name="lastName"
               control={control}
               rules={{ required: dictionary.forms.validations.required }}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <TextField
                   {...field}
                   label={dictionary.forms.user.fieldLastName}
-                  error={!!errors.lastName}
-                  helperText={errors.lastName?.message}
+                  error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
                   InputProps={{
                     startAdornment: <InputAdornment position="start"><Box ml={1} component={Group}/></InputAdornment>,
                   }}
@@ -188,20 +188,19 @@ export const UserForm: React.FC<Props> = ({ defaultValues = {}, onSubmitRequest,
             />
           </Grid>
         )}
-        {/* {isFieldVisible('company') && staffView && type === UserType.Customer && (
+        {isFieldVisible('company') && isAdmin && type === UserType.Customer && (
           <Grid item xs={12} sm={6}>
             <Controller
               name="company"
               control={control}
               rules={{ required: dictionary.forms.validations.required }}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <CompanyAutocomplete
                   {...field}
-                  label={dictionary.forms.fieldCompany}
+                  label={dictionary.forms.user.fieldCompany}
                   TextFieldProps={{
-                    error: !!errors.company,
-                    // @ts-ignore
-                    helperText: errors.company?.message,
+                    error: !!fieldState.error,
+                    helperText: fieldState.error?.message,
                     InputProps: {
                       startAdornment: <InputAdornment position="start"><Box ml={1} component={Business}/></InputAdornment>,
                     },
@@ -212,9 +211,9 @@ export const UserForm: React.FC<Props> = ({ defaultValues = {}, onSubmitRequest,
               )}
             />
           </Grid>
-        )} */}
-        {/* {isFieldVisible('jobTitle') && (
-          <Grid item xs={12} sm={staffView ? 6 : 12}>
+        )}
+        {isFieldVisible('jobTitle') && (
+          <Grid item xs={12} sm={isAdmin && type === UserType.Customer ? 6 : 12}>
             <Controller
               name="jobTitle"
               control={control}
@@ -233,7 +232,7 @@ export const UserForm: React.FC<Props> = ({ defaultValues = {}, onSubmitRequest,
               )}
             />
           </Grid>
-        )} */}
+        )}
         {isFieldVisible('email') && (
           <Grid item xs={12} sm={6}>
             <Controller

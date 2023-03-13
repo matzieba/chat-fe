@@ -9,24 +9,21 @@ import { FeedbackProvider, LocalizationProvider, PermissionProvider } from '@cvt
 import { ThemeComponent } from '@cvt/theme/ThemeComponent';
 
 import { SettingsConsumer, SettingsProvider } from '@shared/contexts';
-import { Dictionary } from '@shared/dictionary';
-import config from '@shared/config';
 import { queryClientConfig } from '@shared/query';
 
 import { DialogProvider } from './contexts/DialogContext/DialogContext';
 
 type MainProps = PropsWithChildren<{
   themeSettings: CVT.Theme.Settings;
-  dictionaries: Record<CVT.Language.SupportedLanguages, Dictionary>;
 }>;
 
 const queryClient = new QueryClient(queryClientConfig);
 
-const Main: React.FC<MainProps> = ({ children,  dictionaries, themeSettings }) => (
+const Main: React.FC<MainProps> = ({ children, themeSettings }) => (
   <Router>
     <MuiLocalizationProvider dateAdapter={AdapterDateFns}>
       <QueryClientProvider client={queryClient}>
-        <LocalizationProvider dictionaries={dictionaries}>
+        <LocalizationProvider>
           <PermissionProvider>
             <ThemeComponent settings={themeSettings}>
               <FeedbackProvider>
@@ -48,9 +45,6 @@ export const App: React.FC<PropsWithChildren> = ({ children }) => (
     <SettingsConsumer>
       {themeSettings => (
         <Main
-          // TODO: Figure out how to properly handle global namespace and modules
-          // @ts-ignore
-          dictionaries={config.language.dictionaries}
           themeSettings={themeSettings}
         >
           {children}

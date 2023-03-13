@@ -1,3 +1,4 @@
+
 import React, { Fragment } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
@@ -12,7 +13,10 @@ import { Authenticated, NotAuthenticated } from '@modules/Auth/components';
 
 
 import { Login, SignUp, Impersonate, ResetPassword } from '@modules/Auth/views';
-import { CreateUser, EditUser, Invite, Profile, Team } from '@modules/Users/views';
+import { Users, CreateUser, EditUser, Invite, Profile } from '@modules/Users/views';
+import { Companies, CreateCompany } from '@modules/Companies/views';
+
+import { EditCompany } from './Companies/EditCompany';
 
 export const Root = () => {
 
@@ -36,7 +40,7 @@ export const Root = () => {
           <Route path={routes.auth.resetPassword} element={<ResetPassword/>}/>
           <Route path={routes.auth.signup} element={<SignUp/>}/>
           <Route path={routes.auth.impersonateUser} element={<Impersonate/>}/>
-          <Route path={routes.user.invite()} element={<Invite/>}/>
+          <Route path={routes.users.invite()} element={<Invite/>}/>
           <Route path="*" element={<Navigate to={routes.auth.login}/>}/>
         </Routes>
       </NotAuthenticated>
@@ -44,10 +48,13 @@ export const Root = () => {
         <Routes>
           <Route path={routes.home} element={<Fragment>Hello</Fragment>}/>
           <Route path={routes.auth.impersonateUser} element={<Impersonate/>}/>
-          <Route path={routes.user.myAccount} element={<Profile/>}/>
-          <Route path={routes.user.create} element={<CreateUser/>}/>
-          <Route path={routes.user.edit()} element={<EditUser/>}/>
-          <Route path={routes.user.team} element={<Team/>}/>
+          <Route path={routes.users.myAccount} element={<Profile/>}/>
+          <Route path={routes.users.list} element={<Users/>}/>
+          <Route path={routes.users.create} element={<CreateUser/>}/>
+          <Route path={routes.users.edit()} element={<EditUser/>}/>
+          <Route path={routes.companies.list} element={<Companies/>}/>
+          <Route path={routes.companies.create} element={<CreateCompany/>}/>
+          <Route path={routes.companies.edit()} element={<EditCompany/>}/>
           <Route path="*" element={<Navigate to={routes.home}/>}/>
         </Routes>
       </Authenticated>

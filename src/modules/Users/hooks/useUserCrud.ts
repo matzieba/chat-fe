@@ -20,7 +20,7 @@ export const useUserCrud = () => {
     mutationKey: [cacheKeys.createUser],
     onSuccess: (data) => {
       queryClient.invalidateQueries([cacheKeys.getUsers]);
-      navigate(routes.user.edit(data.data.id));
+      navigate(routes.users.edit(data.data.id));
       triggerFeedback({
         severity: 'success',
         message: dictionary.feedback.changesSaved,

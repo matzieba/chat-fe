@@ -3,32 +3,32 @@ import { Grid, Box, Paper, Typography } from '@mui/material';
 
 import { LocalizationContext } from '@cvt/contexts';
 
-import { useUserCrud } from '../hooks/useUserCrud';
-import { UserForm } from '../partials/UserForm';
+import { useCompanyCrud } from '../hooks/useCompanyCrud';
+import { CompanyForm } from '../partials/CompanyForm';
 
 
-export const CreateUser: React.FC = () => {
+export const CreateCompany: React.FC = () => {
 
   const { dictionary } = React.useContext(LocalizationContext);
 
-  const { createUser } = useUserCrud();
+  const { createCompany } = useCompanyCrud();
 
-  const onSubmit = React.useCallback((data: Users.Crud) => {
-    return createUser(data);
-  }, [createUser]);
+  const onSubmit = React.useCallback((data: Companies.Crud) => {
+    return createCompany(data);
+  }, [createCompany]);
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h1">{dictionary.users.create.title}</Typography>
+        <Typography variant="h1">{dictionary.companies.create.title}</Typography>
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={2}>
           <Grid item xs={12} lg={8}>
             <Box p={4} component={Paper}>
-              <UserForm
+              <CompanyForm
                 onSubmitRequest={onSubmit}
-                onSubmitButtonText={dictionary.users.create.buttonCreate}
+                onSubmitButtonText={dictionary.companies.create.buttonCreate}
               />
             </Box>
           </Grid>

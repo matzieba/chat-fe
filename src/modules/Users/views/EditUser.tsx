@@ -34,14 +34,14 @@ const EditUserView: React.FC<Users.User> = user => {
       return false;
     }
     return deleteUser(user.id).then(() => {
-      navigate(routes.user.list);
+      navigate(routes.users.list);
     });
   }, [user, deleteUser, asyncConfirmation, dictionary, navigate]);
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h4" component="h1">{user.displayName}</Typography>
+        <Typography variant="h1">{user.displayName}</Typography>
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={2}>

@@ -33,7 +33,7 @@ export const Profile: React.FC = () => {
       ) : (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h4" component="h1">{user.displayName}</Typography>
+            <Typography variant="h1">{user.displayName}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Grid container spacing={2}>
@@ -44,8 +44,8 @@ export const Profile: React.FC = () => {
                       firstName: user.firstName,
                       lastName: user.lastName,
                       email: user.email,
-                      // jobTitle: user.jobTitle,
-                      // company: user.company,
+                      jobTitle: user.jobTitle,
+                      company: user.company,
                       type: user.type,
                       profilePicture: user.profilePicture,
                     }}

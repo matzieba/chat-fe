@@ -6,17 +6,19 @@ import {
   Typography,
   MenuList,
   MenuItem,
+  Paper,
 } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 
 import { DialogContext, LocalizationContext, PermissionContext } from '@cvt/contexts';
-import { IconButtonDropdown } from '@cvt/components/ButtonDropdown'
-;
-import { useUserCrud } from '@modules/Users/hooks/useUserCrud';
+import { IconButtonDropdown } from '@cvt/components/ButtonDropdown';
+
 import { routes } from '@shared/routes';
 
+import { useCompanyCrud } from '../../../hooks/useCompanyCrud';
 
-export const UserRow: React.FC<Users.User> = (user) => {
+
+export const CompanyRow: React.FC<Companies.Company> = (company) => {
 
   const navigate = useNavigate();
 
@@ -24,21 +26,21 @@ export const UserRow: React.FC<Users.User> = (user) => {
   const { asyncConfirmation } = React.useContext(DialogContext);
   const { permissions } = React.useContext(PermissionContext);
 
-  const { deleteUser } = useUserCrud();
+  const { deleteCompany } = useCompanyCrud();
 
   const onDelete = React.useCallback(async () => {
     const userConfirmed = await asyncConfirmation({ title: dictionary.users.edit.deleteConfirmation });
-    if (!user || !userConfirmed) {
+    if (!deleteCompany || !userConfirmed) {
       return false;
     }
-    return deleteUser(user.id);
-  }, [user, deleteUser, asyncConfirmation, dictionary]);
+    return deleteCompany(company.id);
+  }, [company, deleteCompany, asyncConfirmation, dictionary]);
 
   return (
-    <TableRow>
+    <TableRow component={Paper} elevation={1}> 
       <TableCell component="th" scope="row">
-        <Typography variant="subtitle1">{user.displayName}</Typography>
-        <Typography variant="subtitle2">{user.email}</Typography>
+        <Typography variant="subtitle1">{company.name}</Typography>
+        <Typography variant="subtitle2">{company.createdAt.toISOString()}</Typography>
       </TableCell>
       <TableCell align="right">
         <IconButtonDropdown
@@ -48,24 +50,24 @@ export const UserRow: React.FC<Users.User> = (user) => {
           }}
           content={({ closeDropdown }) => (
             <MenuList>
-              {permissions.users.edit && (
+              {permissions.companies.edit && (
                 <MenuItem
                   onClick={() => {
-                    navigate(routes.user.edit(user.id));
+                    navigate(routes.companies.edit(company.id));
                     closeDropdown();
                   }}
                 >
                   {dictionary.users.edit.buttonEdit}
                 </MenuItem>
               )}
-              {permissions.users.delete && (
+              {permissions.companies.delete && (
                 <MenuItem
                   onClick={() => {
                     onDelete();
                     closeDropdown();
                   }}
                 >
-                  {dictionary.users.edit.buttonDelete}
+                  {dictionary.companies.edit.buttonDelete}
                 </MenuItem>
               )}
             </MenuList>

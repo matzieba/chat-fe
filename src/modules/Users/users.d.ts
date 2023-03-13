@@ -33,13 +33,6 @@ declare namespace Users {
     profilePicture?: string;
   }
 
-  // TODO: Implement in Company module
-  // jobTitle: CVT.MaybeNull<string>;
-
-  // export interface ExtendedUser extends User {
-  //   company: MaybeNull<Companies.Company>;
-  // }
-
   export interface Crud {
     firstName: string;
     lastName: string;

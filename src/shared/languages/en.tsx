@@ -93,6 +93,25 @@ export const dictionary = {
     },
   },
 
+  companies: {
+    list: {
+      title: 'Companies',
+
+      nameLabel: 'Name',
+    },
+  
+    create: {
+      title: 'Create company',
+      buttonCreate: 'Create company',
+    },
+
+    edit: {
+      buttonEdit: 'Edit company',
+      buttonDelete: 'Delete company',
+      deleteConfirmation: 'Are you sure you want to delete this company?',
+    },
+  },
+
   menu: {
     auth: {
       login: 'Log In',
@@ -100,26 +119,16 @@ export const dictionary = {
       signUp: 'Signup',
     },
     dashboard: 'Dashboard',
-    user: {
+    users: {
       list: 'Users',
       team: 'Team',
       myAccount: 'My account',
       create: 'Create user',
     },
-    freights: {
-      main: 'Freights',
-      list: 'Freights list',
+    companies: {
+      list: 'Companies',
+      create: 'Create company',
     },
-    trucks: {
-      list: 'Trucks',
-    },
-    storages: {
-      list: 'Storages',
-    },
-    tenders: {
-      list: 'Tenders',
-    },
-    costsCalculator: 'Costs calculator',
   },
 
   forms: {
@@ -138,10 +147,15 @@ export const dictionary = {
       fieldName: 'Name',
       fieldLastName: 'Last name',
       fieldType: 'Type',
+      fieldCompany: 'Company',
       fieldPosition: 'Position',
       fieldPicture: 'Upload picture',
       fieldSurname: 'Surname',
       fieldEmailDisabledHelper: 'Please contact support to change the email.',
+    },
+    company: {
+      fieldName: 'Name',
+      fieldPrimaryContact: 'Primary Contact',
     },
 
     validations: {

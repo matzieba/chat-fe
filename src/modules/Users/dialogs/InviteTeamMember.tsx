@@ -60,7 +60,7 @@ export const InviteTeamMemberDialog: React.FC<Props> = ({ open, onClose }) => {
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>
+        <DialogTitle typography="h2">
           {dictionary.users.invite.dialog.title}
           <IconButton
             aria-label="close"
@@ -74,7 +74,7 @@ export const InviteTeamMemberDialog: React.FC<Props> = ({ open, onClose }) => {
             <Close/>
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent>
           <Grid container direction="column">
             <Grid item>
               <Controller

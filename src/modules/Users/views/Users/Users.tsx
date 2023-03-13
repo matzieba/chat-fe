@@ -1,17 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
 import { DialogContext, LocalizationContext, PermissionContext } from '@cvt/contexts';
 
 import { routes } from '@shared/routes';
 
-import { TeamHeader } from './partials/TeamHeader';
-import { TeamList } from './TeamList';
+import { UsersHeader } from './partials/UsersHeader';
+import { UsersList } from './UsersList';
 
 
-export const Team = () => {
+export const Users = () => {
 
   const navigate = useNavigate();
 
@@ -22,14 +22,14 @@ export const Team = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} display="flex" flexDirection="row" justifyContent="space-between">
-        <Typography variant="h4" component="h1">{dictionary.users.team.title}</Typography>
+        <Typography variant="h1">{dictionary.users.team.title}</Typography>
         <Stack spacing={1} direction="row">
           {permissions.users.create && (
             <Button
               size="medium"
               variant="contained"
               color="secondary"
-              onClick={() => navigate(routes.user.create)}
+              onClick={() => navigate(routes.users.create)}
               startIcon={<Add/>}
             >
               {dictionary.users.create.buttonCreate}
@@ -49,13 +49,13 @@ export const Team = () => {
         </Stack>
       </Grid>
       <Grid item xs={12}>
-        <TeamHeader>
+        <UsersHeader>
           {({ filters }) => (
-            <Box component={Paper} mt={2}>
-              <TeamList filters={filters}/>
+            <Box mt={2}>
+              <UsersList filters={filters}/>
             </Box>
           )}
-        </TeamHeader>
+        </UsersHeader>
       </Grid>
     </Grid>
   );

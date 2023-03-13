@@ -4,6 +4,8 @@ import { App as CVTApp } from '@cvt/App';
 
 import { AuthProvider } from '@modules/Auth/contexts';
 import { UserProvider } from '@modules/Users/contexts';
+import { CompanyProvider } from '@modules/Companies/contexts';
+
 import { MainLayout } from '@shared/components/layouts/MainLayout';
 import { Dialogs } from '@shared/components/Dialogs';
 
@@ -14,10 +16,12 @@ const App = () => {
     <CVTApp>
       <AuthProvider>
         <UserProvider>
-          <MainLayout>
-            <Root />
-            <Dialogs />
-          </MainLayout>
+          <CompanyProvider>
+            <MainLayout>
+              <Root />
+              <Dialogs />
+            </MainLayout>
+          </CompanyProvider>
         </UserProvider>
       </AuthProvider>
     </CVTApp>

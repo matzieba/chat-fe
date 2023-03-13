@@ -43,8 +43,8 @@ const NavigationItem: React.FC<NavigationItemProps> = ({ item, onCloseRequest, L
 
   const itemContent = (
     <React.Fragment>
-      {item.icon && <ListItemIcon sx={{ marginLeft:1.5 }}>{item.icon}</ListItemIcon>}
-      <ListItemText primary={item.text} secondary={item.secondaryText} />
+      {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+      <ListItemText primary={item.text} secondary={item.secondaryText} primaryTypographyProps={{ variant: 'body2' }} />
       {allowedChildren && allowedChildren.length > 0 && (
         <IconButton onClick={handleClick} size="small">
           {open ? <ExpandLess /> : <ExpandMore />}

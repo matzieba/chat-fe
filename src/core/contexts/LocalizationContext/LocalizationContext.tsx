@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Dictionary } from '@shared/dictionary';
 import config from '@shared/config';
 
 import { ContextProps } from './LocalizationContext.types';
@@ -25,14 +24,10 @@ const getLanguageFromLocalStorage = (): CVT.Language.SupportedLanguages => {
 
 export const LocalizationContext = React.createContext(defaultContext);
 
-type Props = React.PropsWithChildren<{
-  dictionaries: Record<CVT.Language.SupportedLanguages, Dictionary>;
-}>
-
-export const LocalizationProvider: React.FC<Props> = ({ children, dictionaries }) => {
+export const LocalizationProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   const [language, setLanguage] = React.useState<CVT.Language.SupportedLanguages>(getLanguageFromLocalStorage());
-  const dictionary = dictionaries[language];
+  const dictionary = config.language.dictionaries[language];
 
 
   React.useEffect(() => {

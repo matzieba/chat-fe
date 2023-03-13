@@ -15,7 +15,7 @@ type Props = {
   }): React.ReactElement;
 }
 
-export const TeamHeader: React.FC<Props> = ({ children }) => {
+export const CompaniesHeader: React.FC<Props> = ({ children }) => {
 
   const { dictionary } = React.useContext(LocalizationContext);
 
@@ -28,6 +28,7 @@ export const TeamHeader: React.FC<Props> = ({ children }) => {
           label={dictionary.filters.fieldSearch}
           value={newSearch || ''}
           onChange={({ target: { value } }) => setSearch(value.trim() === '' ? undefined : value)}
+          size="medium"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
