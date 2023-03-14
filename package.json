@@ -1,7 +1,14 @@
 {
+  "author": "Fabio Santos",
+  "license": "MIT",
+  "homepage": "https://www.cvt.ai/labs",
   "name": "cvt-react-app",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/cvtime/cookiecutter-react.git"
+  },
   "dependencies": {
     "@emotion/react": "11.10.6",
     "@emotion/styled": "11.10.6",
@@ -32,6 +39,7 @@
     "react-router-dom": "6.9.0",
     "react-spinners": "0.13.8",
     "react-use": "17.4.0",
+    "rimraf": "4.4.0",
     "sanitize-html": "2.10.0",
     "web-vitals": "3.3.0"
   },
@@ -44,6 +52,9 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx ./src",
     "ts": "tsc -p ./tsconfig.json"
+  },
+  "bin": {
+    "cvt-react-app": "./bin/create-app.js"
   },
   "eslintConfig": {
     "extends": [
