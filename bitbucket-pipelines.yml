@@ -52,9 +52,11 @@ pipelines:
   default:
     - step: *install_dependencies
     - step: *enforce_code_standards
+    - step: *test_unit
   tags:
     release-*:
       - step: *install_dependencies
+      - step: *test_unit
       - step: *build_beta
       - step:
           name: Deploy to Firebase Beta
@@ -76,6 +78,7 @@ pipelines:
                 PROJECT_ID: $PROD_FIREBASE_PROJECT
     hotfix-*:
       - step: *install_dependencies
+      - step: *test_unit
       - step: *build_prod
       - step:
           name: Deploy to Firebase Prod

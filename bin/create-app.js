@@ -68,6 +68,7 @@ async function setup() {
     buildEnvironmentVariable();
     buildEnvironmentVariable('beta');
     buildEnvironmentVariable('prod');
+    buildIndexHTML();
 
     console.log(
       '\x1b[32m',
@@ -114,8 +115,10 @@ function buildPackageJson(packageJson, folderName) {
   );
 }
 
-function buildEnvironmentVariable(environment) {
-    const env = `
+function buildEnvironmentVariable(env) {
+  const environment = env || 'beta';
+
+  const fileData = `
 EXTEND_ESLINT=true
 
 VITE__CVT_PROJECT_KEY=${projectKey.toUpperCase()}
@@ -138,8 +141,8 @@ VITE__CVT_FIREBASE_MEASUREMENT_ID=
     `
   
   fs.writeFileSync(
-    environment ? `${process.cwd()}/.env.${environment}` : `${process.cwd()}/.env`,
-    env,
+    env ? `${process.cwd()}/.env.${environment}` : `${process.cwd()}/.env`,
+    fileData,
     'utf8'
   );
 }

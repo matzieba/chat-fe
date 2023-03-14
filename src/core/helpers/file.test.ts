@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'vitest';
+
 import { getFileType, bytesToMb, ExtMimeMap, extToMime, imageMimes, videoMimes, documentMimes } from './file';
 
 describe('getFileType', () => {

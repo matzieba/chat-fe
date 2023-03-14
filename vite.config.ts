@@ -1,7 +1,8 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
 import path from 'path';
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import eslint from 'vite-plugin-eslint';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,11 +15,11 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, 'src/pages'),
     },
   },
-  plugins: [react()],
+  plugins: [react(), eslint()],
   server: {
     port: 3000,
   },
   test: {
     environment: 'jsdom',
   },
-})
+});

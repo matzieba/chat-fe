@@ -1,6 +1,5 @@
-import { describe, beforeEach, it, vi, expect, MockedFunction } from 'vitest'
-
 import { useLocation, useNavigate } from 'react-router';
+import { describe, beforeEach, it, vi, expect, MockedFunction } from 'vitest';
 import { renderHook, act } from '@testing-library/react-hooks';
 
 import { useQueryState } from './useQueryState';
@@ -48,6 +47,6 @@ describe('useQueryState', () => {
     expect(navigate).toHaveBeenLastCalledWith({
       search: '',
     });
-  })
+  });
 
 });

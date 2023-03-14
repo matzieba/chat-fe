@@ -1,4 +1,4 @@
-import { describe, beforeEach, it, expect, vi, MockedFunction } from 'vitest'
+import { describe, beforeEach, it, expect, vi, MockedFunction } from 'vitest';
 
 import { attachOptions } from './baseClient';
 import { firebaseClient } from './firebaseClient';
@@ -19,7 +19,7 @@ describe('attachOptions', () => {
     });
 
     // Mocking localStorage
-    vi.stubGlobal('localStorage', { getItem: vi.fn().mockReturnValue('en') })    
+    vi.stubGlobal('localStorage', { getItem: vi.fn().mockReturnValue('en') });  
   });
 
   it('attaches the correct options to the request when authenticate is true', async () => {
