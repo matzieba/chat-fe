@@ -61,8 +61,8 @@ async function setup() {
 
     await runCmd('npx rimraf ./.git');
 
-    // fs.rmdirSync(path.join(appPath, 'bin'), { recursive: true });
-    // fs.unlinkSync(path.join(appPath, 'package.json'));
+    fs.rmdirSync(path.join(appPath, 'bin'), { recursive: true });
+    fs.unlinkSync(path.join(appPath, 'package.json'));
 
     buildPackageJson(packageJson, folderName);
     buildEnvironmentVariable();
