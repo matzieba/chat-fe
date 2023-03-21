@@ -2,12 +2,15 @@
   "author": "Fabio Santos",
   "license": "MIT",
   "homepage": "https://www.cvt.ai/labs",
-  "name": "cvt-react-app",
+  "name": "@cvt.services/cvt-react-app",
   "version": "0.1.0",
-  "private": true,
+  "description": "CVT Services Cookie Cutter",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/cvtime/cookiecutter-react.git"
+    "url": "git@bitbucket.org:cvtime/cookiecutter-react.git"
+  },
+  "bugs": {
+    "url": "https://bitbucket.org/cvtime/cookiecutter-react/issues"
   },
   "dependencies": {
     "@emotion/react": "11.10.6",
@@ -17,17 +20,13 @@
     "@mui/material": "5.11.12",
     "@mui/x-date-pickers-pro": "6.0.1",
     "@tanstack/react-query": "4.26.1",
-    "@testing-library/jest-dom": "5.16.5",
-    "@testing-library/react": "14.0.0",
-    "@testing-library/react-hooks": "8.0.1",
-    "@testing-library/user-event": "14.4.3",
-    "@types/jest": "29.4.0",
-    "@types/node": "18.15.1",
-    "@types/react": "18.0.28",
-    "@types/react-dom": "18.0.11",
     "axios": "1.3.4",
+    "chalk": "4.1.2",
+    "clear": "^0.1.0",
     "date-fns": "2.29.3",
+    "figlet": "^1.5.2",
     "firebase": "9.17.2",
+    "inquirer": "8.0.0",
     "jsdom": "21.1.1",
     "lodash": "4.17.21",
     "query-string": "8.1.0",
@@ -54,243 +53,24 @@
     "ts": "tsc -p ./tsconfig.json"
   },
   "bin": {
-    "cvt-react-app": "./bin/create-app.js"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "rules": {
-      "import/order": [
-        "warn",
-        {
-          "newlines-between": "ignore",
-          "pathGroups": [
-            {
-              "pattern": "react",
-              "group": "external",
-              "position": "before"
-            },
-            {
-              "pattern": "react**",
-              "group": "external",
-              "position": "before"
-            },
-            {
-              "pattern": "@tanstack/**",
-              "group": "external",
-              "position": "before"
-            },
-            {
-              "pattern": "@material-ui/**",
-              "group": "external",
-              "position": "before"
-            },
-            {
-              "pattern": "core/types/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "core/helpers/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "core/clients/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "core/contexts/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "core/hooks/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "core/components/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "core/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "shared/types/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "shared/helpers/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "shared/contexts/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "shared/hooks/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "shared/components/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "shared/img/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "shared/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "modules/*/types/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "modules/*/helpers/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "modules/*/contexts/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "modules/*/hooks/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "modules/*/components/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "modules/*/views/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "modules/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "config",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "tracking",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "pages/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "styles/**",
-              "group": "internal",
-              "position": "before"
-            },
-            {
-              "pattern": "../**",
-              "group": "internal",
-              "position": "after"
-            },
-            {
-              "pattern": "./**",
-              "group": "internal",
-              "position": "after"
-            }
-          ],
-          "pathGroupsExcludedImportTypes": [
-            "builtin"
-          ]
-        }
-      ],
-      "@typescript-eslint/camelcase": "off",
-      "@typescript-eslint/no-empty-function": "off",
-      "@typescript-eslint/explicit-function-return-type": "off",
-      "@typescript-eslint/ban-ts-ignore": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "jsx-quotes": [
-        "warn",
-        "prefer-double"
-      ],
-      "comma-dangle": [
-        "warn",
-        "always-multiline"
-      ],
-      "indent": [
-        "warn",
-        2
-      ],
-      "object-curly-spacing": [
-        "warn",
-        "always"
-      ],
-      "quotes": [
-        "warn",
-        "single"
-      ],
-      "semi": [
-        "error"
-      ],
-      "react/jsx-curly-brace-presence": [
-        1,
-        "never"
-      ],
-      "react/prop-types": "off",
-      "@typescript-eslint/no-var-requires": "off",
-      "no-restricted-imports": "off"
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "cvt-react-app": "bin/create-app.js"
   },
   "devDependencies": {
+    "@testing-library/react": "14.0.0",
+    "@testing-library/react-hooks": "8.0.1",
     "@types/lodash": "4.14.191",
+    "@types/node": "18.15.1",
+    "@types/react": "18.0.28",
+    "@types/react-dom": "18.0.11",
     "@types/sanitize-html": "2.8.1",
+    "@typescript-eslint/eslint-plugin": "5.56.0",
+    "@typescript-eslint/parser": "5.56.0",
     "@vitejs/plugin-react": "3.1.0",
     "@vitest/coverage-c8": "0.29.2",
     "eslint": "8.36.0",
     "eslint-config-react-app": "7.0.1",
     "typescript": "4.9.5",
     "vite": "4.1.4",
-    "vite-plugin-eslint": "1.8.1",
     "vitest": "0.29.2"
   }
 }

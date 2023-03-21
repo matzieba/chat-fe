@@ -1,0 +1,212 @@
+{
+  "extends": [
+    "react-app"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "import/order": [
+      "warn",
+      {
+        "newlines-between": "ignore",
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "react**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@tanstack/**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@material-ui/**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "core/types/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "core/helpers/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "core/clients/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "core/contexts/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "core/hooks/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "core/components/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "core/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "shared/types/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "shared/helpers/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "shared/contexts/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "shared/hooks/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "shared/components/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "shared/img/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "shared/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "modules/*/types/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "modules/*/helpers/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "modules/*/contexts/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "modules/*/hooks/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "modules/*/components/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "modules/*/views/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "modules/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "config",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "tracking",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "pages/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "styles/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "../**",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "./**",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ]
+      }
+    ],
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "jsx-quotes": [
+      "warn",
+      "prefer-double"
+    ],
+    "comma-dangle": [
+      "warn",
+      "always-multiline"
+    ],
+    "indent": [
+      "warn",
+      2
+    ],
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ],
+    "quotes": [
+      "warn",
+      "single"
+    ],
+    "semi": [
+      "error"
+    ],
+    "react/jsx-curly-brace-presence": [
+      1,
+      "never"
+    ],
+    "react/prop-types": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "no-restricted-imports": "off"
+  }
+}

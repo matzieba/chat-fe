@@ -58,7 +58,7 @@ export const InviteTeamMemberDialog: React.FC<Props> = ({ open, onClose }) => {
   }, [open, reset]);
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose} PaperProps={{ variant: 'elevation' }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle typography="h2">
           {dictionary.users.invite.dialog.title}

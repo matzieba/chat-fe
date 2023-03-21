@@ -43,7 +43,7 @@ definitions:
           - node
         name: Build app
         script:
-          - cp .env.beta .env
+          - cp .env.prod .env
           - yarn build
         artifacts:
           - dist/**

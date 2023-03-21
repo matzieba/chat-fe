@@ -26,7 +26,7 @@ export const AsyncConfirmationDialog: React.FC<Props> = ({
   confirmLabel,
   cancelLabel,
 }) => (
-  <Dialog open={open} onClose={onClose}>
+  <Dialog open={open} onClose={onClose} PaperProps={{ variant: 'elevation' }}>
     <DialogContent>
       <Typography variant="body1" align="center" mb={2}>
         {title}
