@@ -13,10 +13,9 @@ import { Authenticated, NotAuthenticated } from '@modules/Auth/components';
 
 
 import { Login, SignUp, Impersonate, ResetPassword } from '@modules/Auth/views';
-import { Users, CreateUser, EditUser, Invite, Profile } from '@modules/Users/views';
-import { Companies, CreateCompany } from '@modules/Companies/views';
+import { Invite } from '@modules/Users/views';
+import {ViewChat} from "@modules/Chat/views/Chat/Chat";
 
-import { EditCompany } from './Companies/EditCompany';
 
 export const Root = () => {
 
@@ -47,15 +46,8 @@ export const Root = () => {
       <Authenticated>
         <Routes>
           <Route path={routes.home} element={<Fragment>Hello</Fragment>}/>
-          <Route path={routes.auth.impersonateUser} element={<Impersonate/>}/>
-          <Route path={routes.users.myAccount} element={<Profile/>}/>
-          <Route path={routes.users.list} element={<Users/>}/>
-          <Route path={routes.users.create} element={<CreateUser/>}/>
-          <Route path={routes.users.edit()} element={<EditUser/>}/>
-          <Route path={routes.companies.list} element={<Companies/>}/>
-          <Route path={routes.companies.create} element={<CreateCompany/>}/>
-          <Route path={routes.companies.edit()} element={<EditCompany/>}/>
-          <Route path="*" element={<Navigate to={routes.home}/>}/>
+          <Route path={routes.chat} element={<ViewChat/>}/>
+          <Route path="*" element={<Navigate to={routes.chat}/>}/>
         </Routes>
       </Authenticated>
     </React.Fragment>

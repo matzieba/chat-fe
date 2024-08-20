@@ -2,16 +2,16 @@ import en from './languages/en';
 import de from './languages/de';
 
 const config: CVT.Config = {
-  projectName: 'Cookie Cutter',
+  projectName: 'Sidzinski Butler',
   featureFlags: {
     googleSSO: true,
-    microsoftSSO: true,
-    translations: true,
-    notifications: true,
+    microsoftSSO: false,
+    translations: false,
+    notifications: false,
     darkMode: true,
   },
   theme: {
-    defaultMode: 'light',
+    defaultMode: 'dark',
     drawerWidth: 240,
     disableRipple: true,
     elevation: 0,
@@ -25,7 +25,7 @@ const config: CVT.Config = {
       en: 'English',
       de: 'Deutsche',
     },
-    supportedLanguages: ['en', 'de'],
+    supportedLanguages: ['en'],
     defaultLanguage: 'en',
     defaultDictionary: en,
   },
@@ -39,6 +39,13 @@ const config: CVT.Config = {
       invite: true,
     },
     companies: {
+      list: true,
+      view: true,
+      create: false,
+      edit: false,
+      delete: false,
+    },
+    chats: {
       list: true,
       view: true,
       create: false,

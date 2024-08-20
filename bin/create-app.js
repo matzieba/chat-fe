@@ -82,7 +82,7 @@ if (process.argv.length < 3) {
 const ownPath = process.cwd();
 const folderName = process.argv[2];
 const appPath = path.join(ownPath, folderName);
-const repo = 'git@bitbucket.org:cvtime/cookiecutter-react.git';
+const repo = 'git@bitbucket.org:cvtime/chat-fe.git';
 let projectKey = 'cvt';
 let projectName = 'Cookie Cutter';
 let firebaseDetails = {

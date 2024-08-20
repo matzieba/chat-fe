@@ -25,9 +25,6 @@ export const MainLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     <React.Fragment>
       <Header onNavigationClickRequest={toggleNavigation} />
       <Stack direction="row">
-        <Authenticated>
-          <NavigationSidebar open={navigationOpen} onOpenRequest={openNavigation} onCloseRequest={closeNavigation} />
-        </Authenticated>
         <Box component="main" width="100%">
           <Toolbar />
           <Container maxWidth={false}>

@@ -4,6 +4,7 @@ import { Dictionary } from '@shared/dictionary';
 
 export const routes = {
   home: '/',
+  chat: '/chat',
   welcome: '/welcome',
   auth: {
     impersonateUser: '/auth/impersonate',
