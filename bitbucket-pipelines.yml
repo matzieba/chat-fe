@@ -47,7 +47,7 @@ definitions:
       - step: *test_unit
       - step: *build
       - step:
-          name: Deploy to Firebase Beta
+          name: Deploy to Firebase
           deployment: staging
           script:
             - pipe: atlassian/firebase-deploy:3.0.0
