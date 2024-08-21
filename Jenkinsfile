@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        image 'node:18.0.0'
+    }
     environment {
         HOME = '.'
     }
