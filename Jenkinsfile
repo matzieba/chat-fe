@@ -6,8 +6,8 @@ pipeline {
 
     tools {nodejs 'node'}
     environment {
-            FIREBASE_TOKEN     = credentials('firebase_token')
-            FIREBASE_PROJECT = credentials('firebase_project')
+            FIREBASE_TOKEN     = credentials('FIREBASE_TOKEN')
+            FIREBASE_PROJECT = credentials('FIREBASE_PROJECT')
         }
     stages {
         stage('Install Dependencies') {
