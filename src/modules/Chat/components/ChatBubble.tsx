@@ -20,8 +20,6 @@ import {
 import { AuthContext } from '@modules/Auth/contexts';
 import { UserContext } from '@modules/Users/contexts';
 
-import { DataGrid } from '@mui/x-data-grid';
-
 interface Props extends Partial<Pick<Chats.Messages.Message, 'id' | 'createdAt'>> {
     message: string;
     role: Chats.Messages.MessageRole;
@@ -88,13 +86,6 @@ export const ChatBubble: React.FC<Props> = ({ role, message, messageType, isLoad
                     lineHeight: 1,
                     textAlign: isLoading ? 'center' : (role === 'user' ? 'right': 'left') }}
                 >
-                    {isDataGridMessage &&
-                        <DataGrid
-                            rows={dataColumns.data}
-                            columns={dataColumns.columns}
-                            checkboxSelection
-                        />
-                    }
                     {!isDataGridMessage && <Markdown
                         remarkPlugins={[remarkGfm]}
                         components={{
