@@ -1,8 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'node:18.0.0' }
-    }
-
+    agent any
     environment {
         HOME = '.'
     }
