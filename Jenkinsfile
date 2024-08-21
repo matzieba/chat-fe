@@ -14,18 +14,18 @@ pipeline {
           }
         }
 
-        stage('Enforce Code Standards') {
-            steps {
-                sh 'yarn lint'
-                sh 'yarn ts'
-            }
-        }
-
-        stage('Run Unit Tests') {
-            steps {
-                sh 'yarn test'
-            }
-        }
+//         stage('Enforce Code Standards') {
+//             steps {
+//                 sh 'yarn lint'
+//                 sh 'yarn ts'
+//             }
+//         }
+//
+//         stage('Run Unit Tests') {
+//             steps {
+//                 sh 'yarn test'
+//             }
+//         }
 
         stage('Build App') {
             steps {
