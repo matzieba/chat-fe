@@ -26,7 +26,7 @@ definitions:
           - node
         artifacts:
           - node_modules/**
-    - step: &build_beta
+    - step: &build
         size: 2x
         caches:
           - node
@@ -37,18 +37,6 @@ definitions:
         artifacts:
           - dist/**
           - node_modules/**
-    - step: &build_prod
-        size: 2x
-        caches:
-          - node
-        name: Build app
-        script:
-          - cp .env.prod .env
-          - yarn build
-        artifacts:
-          - dist/**
-          - node_modules/**
-pipelines:
   default:
     - step: *install_dependencies
     - step: *enforce_code_standards
@@ -57,34 +45,14 @@ pipelines:
     release-*:
       - step: *install_dependencies
       - step: *test_unit
-      - step: *build_beta
+      - step: *build
       - step:
           name: Deploy to Firebase Beta
           deployment: staging
           script:
             - pipe: atlassian/firebase-deploy:3.0.0
               variables:
-                FIREBASE_TOKEN: $BETA_FIREBASE_TOKEN
-                PROJECT_ID: $BETA_FIREBASE_PROJECT
-      - step: *build_prod
-      - step:
-          trigger: manual
-          name: Deploy to Firebase Prod
-          deployment: production
-          script:
-            - pipe: atlassian/firebase-deploy:3.0.0
-              variables:
-                FIREBASE_TOKEN: $PROD_FIREBASE_TOKEN
-                PROJECT_ID: $PROD_FIREBASE_PROJECT
-    hotfix-*:
-      - step: *install_dependencies
-      - step: *test_unit
-      - step: *build_prod
-      - step:
-          name: Deploy to Firebase Prod
-          deployment: production
-          script:
-            - pipe: atlassian/firebase-deploy:3.0.0
-              variables:
-                FIREBASE_TOKEN: $PROD_FIREBASE_TOKEN
-                PROJECT_ID: $PROD_FIREBASE_PROJECT
+                FIREBASE_TOKEN: $FIREBASE_TOKEN
+                PROJECT_ID: $FIREBASE_PROJECT
+
+
