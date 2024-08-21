@@ -4,7 +4,7 @@ pipeline {
         HOME = '.'
     }
 
-    tools {nodejs 'node-22.6.0'}
+    tools {nodejs 'node'}
 
     stages {
         stage('Install Dependencies') {
