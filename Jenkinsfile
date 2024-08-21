@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage('Install Dependencies') {
           steps {
+            sh 'yarn cache clean'
             sh 'npm install -g yarn'
             sh 'yarn install --network-timeout 500000'
           }
