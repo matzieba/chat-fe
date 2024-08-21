@@ -1,16 +1,15 @@
 pipeline {
-    agent {
-        image 'node:18.0.0'
-    }
+    agent any
     environment {
         HOME = '.'
     }
 
     stages {
         stage('Install Dependencies') {
-            steps {
-                sh 'yarn install --network-timeout 500000'
-            }
+          steps {
+            sh 'npm install -g yarn'
+            sh 'yarn install --network-timeout 500000'
+          }
         }
 
         stage('Enforce Code Standards') {
