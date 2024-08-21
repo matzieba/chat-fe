@@ -26,7 +26,7 @@ interface Props {
 const ChatView: React.FC<Chats.Threads.ExtendedThread & Partial<Props>> = thread => {
 
     const queryClient = useQueryClient();
-
+    const inputEl = React.useRef(null);
     const [refetchInterval, setRefetchInterval] = React.useState<number | undefined>();
     const { createMessage } = useMessagesCrud();
     const [message, setMessage] = React.useState<string>();
@@ -103,6 +103,13 @@ const ChatView: React.FC<Chats.Threads.ExtendedThread & Partial<Props>> = thread
         setTimeout(executeScroll, 100);
     }, [thread?.messages, executeScroll]);
 
+    React.useEffect(() => {
+        if (inputEl.current) {
+            // @ts-ignore
+            inputEl.current.focus();
+        }
+    }, [isSending, isReceiving]);
+
     return (
         <Box display="flex" flexDirection="column" width="100%" height="100%">
             <Stack ref={messageContainerEl} direction="column" spacing={3} height="100%" maxHeight="100%" overflow="auto" py={3} px={{ xs: 2.5, sm: 1.5 }}>
@@ -141,6 +148,7 @@ const ChatView: React.FC<Chats.Threads.ExtendedThread & Partial<Props>> = thread
                     <Box component="form" onSubmit={onSubmit} width="100%">
                         <TextField
                             fullWidth
+                            inputRef={inputEl}
                             size="small"
                             autoComplete="off"
                             value={isSending ? '' : message}
