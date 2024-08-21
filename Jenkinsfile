@@ -1,11 +1,14 @@
 pipeline {
     agent any
-    environment {
-        HOME = '.'
-    }
+//     environment {
+//         HOME = '.'
+//     }
 
     tools {nodejs 'node'}
-
+    environment {
+            FIREBASE_TOKEN     = credentials('firebase_token')
+            FIREBASE_PROJECT = credentials('firebase_project')
+        }
     stages {
         stage('Install Dependencies') {
           steps {
