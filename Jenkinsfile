@@ -38,9 +38,6 @@ pipeline {
         }
 
         stage('Deploy to Firebase') {
-            when {
-                branch 'release-*'
-            }
             steps {
                 withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
                     sh '''
