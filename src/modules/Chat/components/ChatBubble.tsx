@@ -1,20 +1,9 @@
 import React from 'react';
-import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {
     Avatar,
     Box,
-    List,
-    ListItem,
-    ListItemText,
     Stack,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography,
 } from '@mui/material';
 
 import { AuthContext } from '@modules/Auth/contexts';
@@ -36,17 +25,6 @@ export const ChatBubble: React.FC<Props> = ({ role, message, messageType, isLoad
         return messageType === 'json';
     }, [messageType]);
 
-    const dataColumns = React.useMemo(() => {
-        if (isDataGridMessage) {
-            const dataString = message.replace('DATA_GRID:', '');
-            const data = JSON.parse(dataString);
-            data.forEach((item: any, index: number) => item.id = index);
-            const columns = Object.keys(data[0]).map((key) => ({ field: key, headerName: key, width: 150 }));
-            return { data, columns };
-        }
-        return { data: [], columns: [] };
-
-    }, [isDataGridMessage, message]);
 
     return (
         <Stack
@@ -86,26 +64,6 @@ export const ChatBubble: React.FC<Props> = ({ role, message, messageType, isLoad
                     lineHeight: 1,
                     textAlign: isLoading ? 'center' : (role === 'user' ? 'right': 'left') }}
                 >
-                    {!isDataGridMessage && <Markdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                            p: ({ children }) => <Typography variant="body1" display="block" lineHeight={1}>{children}</Typography>,
-                            h1: ({ children }) => <Typography variant="h3" component="h1" fontWeight={600} lineHeight={1}>{children}</Typography>,
-                            h2: ({ children }) => <Typography variant="h2" component="h1" fontWeight={600} lineHeight={1}>{children}</Typography>,
-                            h3: ({ children }) => <Typography variant="h3" fontWeight={600} lineHeight={1}>{children}</Typography>,
-                            h4: ({ children }) => <Typography variant="h4" fontWeight={600} lineHeight={1}>{children}</Typography>,
-                            h5: ({ children }) => <Typography variant="h5" fontWeight={600} lineHeight={1}>{children}</Typography>,
-                            ul: ({ children }) => <List disablePadding>{children}</List>,
-                            li: ({ children }) => <ListItem disablePadding><ListItemText disableTypography>{children}</ListItemText></ListItem>,
-                            table: ({ children }) => <TableContainer><Table>{children}</Table></TableContainer>,
-                            thead: ({ children }) => <TableHead>{children}</TableHead>,
-                            tbody: ({ children }) => <TableBody>{children}</TableBody>,
-                            tr: ({ children }) => <TableRow>{children}</TableRow>,
-                            td: ({ children }) => <TableCell>{children}</TableCell>,
-                        }}
-                    >
-                        {message}
-                    </Markdown>}
                 </Box>
             </Box>
             {role === 'user' && (
