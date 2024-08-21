@@ -43,7 +43,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'FIREBASE_TOKEN', variable: 'FIREBASE_TOKEN')]) {
                     sh '''
                     yarn global add firebase-tools
-                    firebase-tools deploy --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT
+                    firebase deploy --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT
                     '''
                 }
             }
