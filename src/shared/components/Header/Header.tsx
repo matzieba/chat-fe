@@ -37,22 +37,9 @@ export const Header: React.FC<Props> = ({ onNavigationClickRequest }) => {
       position="fixed"
     >
       <Toolbar>
-        <Hidden smUp>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={onNavigationClickRequest}
-          >
-            <Menu />
-          </IconButton>
-        </Hidden>
         <Typography variant="h1" component="div" sx={{ flexGrow: 1 }}>
           {config.projectName}
         </Typography>
-        
         <Stack flexGrow={0} direction="row" alignItems="center" spacing={2}>
           {isAdmin && (
             <CompanyAutocomplete
