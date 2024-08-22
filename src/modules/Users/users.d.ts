@@ -31,6 +31,7 @@ declare namespace Users {
     type: Type;
     phone?: CVT.MaybeNull<string>;
     profilePicture?: string;
+    chatId: number;
   }
 
   export interface Crud {

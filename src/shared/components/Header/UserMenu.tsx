@@ -67,8 +67,12 @@ export const UserMenu: React.FC<Props> = ({ children, anchorEl, onCloseRequest }
   const notAuthenticatedNavRoutes = React.useMemo(() => {
     return userMenuRoutes.filter(it => !it.requiresAuth);
   }, [userMenuRoutes]);
-
-
+  
+  const handleChatClick = (id: number) => {
+    navigate(routes.chat(id));
+  };
+  
+  // @ts-ignore
   return (
     <React.Fragment>
       {children}
@@ -85,6 +89,14 @@ export const UserMenu: React.FC<Props> = ({ children, anchorEl, onCloseRequest }
             <MenuItem onClick={() => [navigate(routes.users.myAccount), onCloseRequest()]}>
               <ListItemText primary={user.displayName} secondary={user.email} />
             </MenuItem>
+          )}
+          {user && (
+              <MenuItem>
+                <ListItemIcon onClick={
+                  () => handleChatClick(user.chatId)
+                }><Translate/></ListItemIcon>
+                <ListItemText primary='Chat with Butler' />
+              </MenuItem>
           )}
           {authenticatedNavRoutes.map((item, idx) => <NavigationItem key={idx} item={item} onCloseRequest={onCloseRequest} />)}
           <NavigationItem

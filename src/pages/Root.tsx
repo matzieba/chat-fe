@@ -46,8 +46,8 @@ export const Root = () => {
       <Authenticated>
         <Routes>
           <Route path={routes.home} element={<Fragment>Hello</Fragment>}/>
-          <Route path={routes.chat} element={<ViewChat/>}/>
-          <Route path="*" element={<Navigate to={routes.chat}/>}/>
+          <Route path={routes.chat()} element={<ViewChat/>}/>
+          <Route path="*" element={<Navigate to={routes.home}/>}/>
         </Routes>
       </Authenticated>
     </React.Fragment>

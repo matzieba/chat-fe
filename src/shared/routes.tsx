@@ -4,7 +4,7 @@ import { Dictionary } from '@shared/dictionary';
 
 export const routes = {
   home: '/',
-  chat: '/chat',
+  chat: (chatId: string | number = ':chatId') => `/chat/${chatId}`,
   welcome: '/welcome',
   auth: {
     impersonateUser: '/auth/impersonate',

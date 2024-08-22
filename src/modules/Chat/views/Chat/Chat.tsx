@@ -187,9 +187,7 @@ export const Chat: React.FC<Props> = ({ id }) => {
 };
 
 export const ViewChat = () => {
-    // const { chatId } = useParams();
-    const  chatId  = "1"
-
+    const { chatId } = useParams();
 
     if (!chatId) {
         return <Navigate to={routes.home} />;
