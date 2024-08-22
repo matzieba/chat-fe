@@ -64,6 +64,7 @@ export const ChatBubble: React.FC<Props> = ({ role, message, messageType, isLoad
                     lineHeight: 1,
                     textAlign: isLoading ? 'center' : (role === 'user' ? 'right': 'left') }}
                 >
+                    {message}
                 </Box>
             </Box>
             {role === 'user' && (
