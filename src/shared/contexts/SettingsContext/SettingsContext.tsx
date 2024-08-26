@@ -13,16 +13,13 @@ const defaultContext: ContextProps = {
   toggleMode: () => null,
 };
 
-const getModeFromLocalStorage = (): CVT.Theme.Settings['mode'] => {
-  return localStorage.getItem(localStorageKey) as CVT.Theme.Settings['mode'] || 'light';
-};
 
 
 export const SettingsContext = React.createContext(defaultContext);
 
 export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
-  const [mode, setMode] = React.useState<CVT.Theme.Settings['mode']>(getModeFromLocalStorage());
+  const [mode, setMode] = React.useState<CVT.Theme.Settings['mode']>('dark');
 
   React.useEffect(() => {
     localStorage.setItem(localStorageKey, mode);

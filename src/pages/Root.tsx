@@ -15,6 +15,7 @@ import { Authenticated, NotAuthenticated } from '@modules/Auth/components';
 import { Login, SignUp, Impersonate, ResetPassword } from '@modules/Auth/views';
 import { Invite } from '@modules/Users/views';
 import {ViewChat} from "@modules/Chat/views/Chat/Chat";
+import { Main } from './Main/Main';
 
 
 export const Root = () => {
@@ -45,7 +46,7 @@ export const Root = () => {
       </NotAuthenticated>
       <Authenticated>
         <Routes>
-          <Route path={routes.home} element={<Fragment>Hello</Fragment>}/>
+          <Route path={routes.home} element={<Main/>}/>
           <Route path={routes.chat()} element={<ViewChat/>}/>
           <Route path="*" element={<Navigate to={routes.home}/>}/>
         </Routes>

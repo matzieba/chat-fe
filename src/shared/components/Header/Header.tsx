@@ -37,16 +37,27 @@ export const Header: React.FC<Props> = ({ onNavigationClickRequest }) => {
       position="fixed"
     >
       <Toolbar>
-        <Typography variant="h1" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h1" component="div" sx={{flexGrow: 1}}>
           {config.projectName}
+          <img
+              src={`src/shared/imgs/waiter.png`}
+              alt="logo"
+              style={{
+                verticalAlign: 'middle',
+                height: '1em',
+                filter: 'invert(100%) brightness(100%)',
+                marginLeft: '0.3em',
+                marginBottom: '0.2em'
+              }}
+          />
         </Typography>
         <Stack flexGrow={0} direction="row" alignItems="center" spacing={2}>
           {isAdmin && (
-            <CompanyAutocomplete
-              sx={{ minWidth: 250 }}
-              size="small"
-              label="Customer"
-              value={company}
+              <CompanyAutocomplete
+                  sx={{minWidth: 250}}
+                  size="small"
+                  label="Customer"
+                  value={company}
               onChange={(e, value) => selectCompany(value)}
               TextFieldProps={{
                 color: 'secondary',

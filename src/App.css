@@ -1,0 +1,10 @@
+.imgHover {
+    width: 25%;
+    opacity: 0.7;
+    borderRadius: 10%;
+    transition: transform 0.3s ease-in-out;
+}
+
+.imgHover:hover {
+    transform: scale(0.95);
+}
