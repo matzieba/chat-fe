@@ -67,10 +67,7 @@ export const UserMenu: React.FC<Props> = ({ children, anchorEl, onCloseRequest }
   const notAuthenticatedNavRoutes = React.useMemo(() => {
     return userMenuRoutes.filter(it => !it.requiresAuth);
   }, [userMenuRoutes]);
-  
-  const handleChatClick = (id: number) => {
-    navigate(routes.chat(id));
-  };
+
   
   // @ts-ignore
   return (

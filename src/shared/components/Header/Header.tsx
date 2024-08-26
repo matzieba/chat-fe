@@ -11,6 +11,8 @@ import { CompanyAutocomplete } from '@modules/Companies/components/CompanyAutoco
 import config from '@shared/config';
 
 import { UserMenu } from './UserMenu';
+import { useNavigate } from 'react-router';
+import { routes } from '@shared/routes';
 
 type Props = {
   onNavigationClickRequest: () => void;
@@ -32,12 +34,14 @@ export const Header: React.FC<Props> = ({ onNavigationClickRequest }) => {
     setAnchorElUser(null);
   };
 
+  const navigate = useNavigate();
+
   return (
     <AppBar
       position="fixed"
     >
       <Toolbar>
-        <Typography variant="h1" component="div" sx={{flexGrow: 1}}>
+        <Typography variant="h1" component="div" sx={{flexGrow: 1}} onClick={()=>navigate(routes.home)}>
           {config.projectName}
           <img
               src={`src/shared/imgs/waiter.png`}

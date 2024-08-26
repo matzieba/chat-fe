@@ -1,5 +1,9 @@
+import React from 'react';
 import { Box, Container } from "@mui/material";
 import { styled } from '@mui/system';
+import { routes } from "@shared/routes";
+import { useNavigate } from "react-router";
+import { AuthContext } from '@modules/Auth/contexts';
 
 const StyledImage = styled('img')({
     width: '60%',
@@ -19,9 +23,14 @@ const ImageButton = styled('button')({
 });
 
 export const Main: React.FC = () => {
+
+    const { user } = React.useContext(AuthContext);
+    const navigate = useNavigate();
+
     const handleClick = () => {
-        alert('Image clicked!');
+        if (user) {navigate(routes.chat(user.chatId))}
     }
+
 
     return (
         <Container maxWidth={false} disableGutters sx={{ height: '100vh' }}>
