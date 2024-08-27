@@ -5,7 +5,6 @@ import {
     Box,
     Stack,
 } from '@mui/material';
-
 import { AuthContext } from '@modules/Auth/contexts';
 import { UserContext } from '@modules/Users/contexts';
 
@@ -16,15 +15,10 @@ interface Props extends Partial<Pick<Chats.Messages.Message, 'id' | 'createdAt'>
     messageType?: string;
 }
 
-export const ChatBubble: React.FC<Props> = ({ role, message, messageType, isLoading = false }) => {
+export const ChatBubble: React.FC<Props> = ({ role, message, isLoading = false }) => {
 
     const { firebaseUser } = React.useContext(AuthContext);
     const { user } = React.useContext(UserContext);
-
-    const isDataGridMessage = React.useMemo(() => {
-        return messageType === 'json';
-    }, [messageType]);
-
 
     return (
         <Stack
@@ -40,7 +34,18 @@ export const ChatBubble: React.FC<Props> = ({ role, message, messageType, isLoad
         >
             {(role === 'assistant' || isLoading) && (
                 <Box>
-                    <Avatar sx={{ bgcolor: 'secondary.main', width: 32, height: 32, color: 'secondary.contrastText', ml: { xs: -1.5, sm: 0 } }} alt="Valory" />
+                    <Avatar
+                        sx={{
+                            bgcolor: 'inverse.main',
+                            width: 32,
+                            height: 32,
+                            color: 'secondary.contrastText',
+                            ml: { xs: -1.5, sm: 0 }
+
+                        }}
+                        alt="Butler"
+                        src={`https://storage.googleapis.com/sidzinski-butler/deer_1.png`}
+                    />
                 </Box>
             )}
             <Box
