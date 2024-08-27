@@ -4,7 +4,7 @@ import de from './languages/de';
 const config: CVT.Config = {
   projectName: 'Sidzinski Butler',
   featureFlags: {
-    googleSSO: true,
+    googleSSO: false,
     microsoftSSO: false,
     translations: false,
     notifications: false,
