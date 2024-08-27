@@ -1,5 +1,4 @@
 import React from 'react';
-import remarkGfm from 'remark-gfm';
 import {
     Avatar,
     Box,
@@ -15,7 +14,35 @@ interface Props extends Partial<Pick<Chats.Messages.Message, 'id' | 'createdAt'>
     messageType?: string;
 }
 
-export const ChatBubble: React.FC<Props> = ({ role, message, isLoading = false }) => {
+interface TextProps {
+    text: string;
+    typingDelay?: number;
+    startDelay?: number;
+}
+
+export const TypingText: React.FC<TextProps> = ({ text, typingDelay = 30, startDelay = 500 }) => {
+    const [content, setContent] = React.useState('');
+
+    React.useEffect(() => {
+        setContent('');
+        let typingTimeout: NodeJS.Timeout;
+        const typing = setTimeout(() => {
+            for (let i = 0; i < text.length; i++) {
+                typingTimeout = setTimeout(() => {
+                    setContent((content) => `${content}${text[i]}`);
+                }, i * typingDelay);
+            }
+        }, startDelay);
+        return () => {
+            clearTimeout(typing);
+            clearTimeout(typingTimeout);
+        };
+    }, [text, typingDelay, startDelay]);
+
+    return <span>{content}</span>;
+};
+
+export const ChatBubble: React.FC<Props & { isLastAssistantMessage?: boolean }> = ({ role, message, isLoading = false, isLastAssistantMessage = false }) => {
 
     const { firebaseUser } = React.useContext(AuthContext);
     const { user } = React.useContext(UserContext);
@@ -69,7 +96,9 @@ export const ChatBubble: React.FC<Props> = ({ role, message, isLoading = false }
                     lineHeight: 1,
                     textAlign: isLoading ? 'center' : (role === 'user' ? 'right': 'left') }}
                 >
-                    {message}
+                    {role === 'assistant' ?
+                        isLastAssistantMessage ? <TypingText text={message} /> : message
+                        : message}
                 </Box>
             </Box>
             {role === 'user' && (

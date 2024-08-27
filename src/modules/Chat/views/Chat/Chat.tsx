@@ -113,18 +113,23 @@ const ChatView: React.FC<Chats.Threads.ExtendedThread & Partial<Props>> = thread
     return (
         <Box display="flex" flexDirection="column" width="100%" height="100%">
             <Stack ref={messageContainerEl} direction="column" spacing={3} height="100%" maxHeight="100%" overflow="auto" py={3} px={{ xs: 2.5, sm: 1.5 }}>
-                {thread.messages.map((message, idx) => !!message.messageText && (
-                    <Box width="100%" display="flex" position="relative">
-                        <ChatBubble
-                            key={message.id}
-                            id={message.id}
-                            role={message.role}
-                            message={message.messageText}
-                            messageType={message.type}
-                        />
-
-                    </Box>
-                ))}
+                {thread.messages.map((message, idx) => {
+                    const isLastAssistantMessage = idx === thread.messages.length - 1 && message.role === 'assistant';
+                    return (
+                        !!message.messageText && (
+                            <Box width="100%" display="flex" position="relative">
+                                <ChatBubble
+                                    key={message.id}
+                                    id={message.id}
+                                    role={message.role}
+                                    message={message.messageText}
+                                    messageType={message.type}
+                                    isLastAssistantMessage={isLastAssistantMessage}
+                                />
+                            </Box>
+                        )
+                    );
+                })}
                 {(isSending && isLastMessageFromBot && !!message) && (
                     <ChatBubble
                         message={message}
