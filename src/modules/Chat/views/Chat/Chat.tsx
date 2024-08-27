@@ -125,6 +125,7 @@ const ChatView: React.FC<Chats.Threads.ExtendedThread & Partial<Props>> = thread
                                     message={message.messageText}
                                     messageType={message.type}
                                     isLastAssistantMessage={isLastAssistantMessage}
+                                    executeScroll={executeScroll}
                                 />
                             </Box>
                         )

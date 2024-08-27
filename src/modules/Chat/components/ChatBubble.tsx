@@ -12,6 +12,7 @@ interface Props extends Partial<Pick<Chats.Messages.Message, 'id' | 'createdAt'>
     role: Chats.Messages.MessageRole;
     isLoading?: boolean;
     messageType?: string;
+    executeScroll?: ()=>void;
 }
 
 interface TextProps {
@@ -20,7 +21,7 @@ interface TextProps {
     startDelay?: number;
 }
 
-export const TypingText: React.FC<TextProps> = ({ text, typingDelay = 15, startDelay = 500 }) => {
+export const TypingText: React.FC<TextProps & { onComplete?:()=>void }> = ({ text, typingDelay = 15, startDelay = 500, onComplete }) => {
     const [content, setContent] = React.useState('');
 
     React.useEffect(() => {
@@ -29,20 +30,25 @@ export const TypingText: React.FC<TextProps> = ({ text, typingDelay = 15, startD
         const typing = setTimeout(() => {
             for (let i = 0; i < text.length; i++) {
                 typingTimeout = setTimeout(() => {
-                    setContent((content) => `${content}${text[i]}`);
+                    setContent(content => `${content}${text[i]}`);
+
+                    if(i === text.length - 1){
+                        if(onComplete) onComplete();
+                    }
                 }, i * typingDelay);
             }
         }, startDelay);
+
         return () => {
             clearTimeout(typing);
             clearTimeout(typingTimeout);
         };
-    }, [text, typingDelay, startDelay]);
+    }, [text, typingDelay, startDelay, onComplete]);
 
     return <span>{content}</span>;
 };
 
-export const ChatBubble: React.FC<Props & { isLastAssistantMessage?: boolean }> = ({ role, message, isLoading = false, isLastAssistantMessage = false }) => {
+export const ChatBubble: React.FC<Props & { isLastAssistantMessage?: boolean }> = ({ role, message, isLoading = false, isLastAssistantMessage = false, executeScroll }) => {
 
     const { firebaseUser } = React.useContext(AuthContext);
     const { user } = React.useContext(UserContext);
@@ -97,7 +103,7 @@ export const ChatBubble: React.FC<Props & { isLastAssistantMessage?: boolean }> 
                     textAlign: isLoading ? 'center' : (role === 'user' ? 'right': 'left') }}
                 >
                     {role === 'assistant' ?
-                        isLastAssistantMessage ? <TypingText text={message} /> : message
+                        isLastAssistantMessage ? <TypingText text={message} onComplete={executeScroll} /> : message
                         : message}
                 </Box>
             </Box>
