@@ -41,8 +41,13 @@ export const Header: React.FC<Props> = ({ onNavigationClickRequest }) => {
       position="fixed"
     >
       <Toolbar>
-        <Typography variant="h1" component="div" sx={{flexGrow: 1}} onClick={()=>navigate(routes.home)}>
-          {config.projectName}
+        <Typography
+            variant="h1"
+            component="div"
+            sx={{ flexGrow: 1, cursor: 'pointer' }}
+            onClick={()=>navigate(routes.home)}
+        >
+        {config.projectName}
           <img
               src={`src/shared/imgs/waiter.png`}
               alt="logo"

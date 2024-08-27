@@ -88,7 +88,6 @@ export const UserMenu: React.FC<Props> = ({ children, anchorEl, onCloseRequest }
                 <ListItemText primary='Chat with Butler' />
               </MenuItem>
           )}
-          {authenticatedNavRoutes.map((item, idx) => <NavigationItem key={idx} item={item} onCloseRequest={onCloseRequest} />)}
           <NavigationItem
             item={{
               icon: <Logout />,
