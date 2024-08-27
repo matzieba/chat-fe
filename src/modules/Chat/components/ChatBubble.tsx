@@ -20,7 +20,7 @@ interface TextProps {
     startDelay?: number;
 }
 
-export const TypingText: React.FC<TextProps> = ({ text, typingDelay = 30, startDelay = 500 }) => {
+export const TypingText: React.FC<TextProps> = ({ text, typingDelay = 15, startDelay = 500 }) => {
     const [content, setContent] = React.useState('');
 
     React.useEffect(() => {
