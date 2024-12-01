@@ -6,11 +6,13 @@ export namespace ChessApi {
         game_status: string;
         created_at: string;
         current_player: string;
+        player: string;
     }
 
     export interface PlayerMoveParams {
-        game_id: number;
-        move: string; // The move in 'e2e4' format
+        game_id?: number | undefined;
+        move?: string;
+        player?: string | undefined;
     }
 
 }

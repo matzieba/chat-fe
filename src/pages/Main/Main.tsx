@@ -28,7 +28,7 @@ export const Main: React.FC = () => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        if (user) {navigate(routes.chat(user.chatId))}
+        if (user) {navigate(routes.chess(user.gameId))}
     }
 
 
@@ -45,7 +45,7 @@ export const Main: React.FC = () => {
                 <h1 style={{textAlign: 'center'}}>
                     Sidzina Chess World Open Series 2024
                     <img
-                        src={`https://storage.googleapis.com/sidzinski-butler/deer_1.png`}
+                        src={`src/shared/imgs/deer_1.png`}
                         alt="logo"
                         style={{
                             verticalAlign: 'middle',
@@ -59,7 +59,7 @@ export const Main: React.FC = () => {
                 <p style={{textAlign: 'center', margin: '2rem'}}>Yo! Yo! Jeżeli chcesz się znaleźć na miejscu Chlebiego,
                     klikaj!</p>
                 <ImageButton onClick={handleClick}>
-                    <StyledImage src="https://storage.googleapis.com/sidzinski-butler/img.png" alt="description"/>
+                    <StyledImage src="src/shared/imgs/img.png" alt="description"/>
                 </ImageButton>
             </Box>
         </Container>

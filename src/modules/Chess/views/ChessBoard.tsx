@@ -1,39 +1,21 @@
 import React from 'react';
 import { Chessboard } from 'react-chessboard';
-import { useInitGame, useMakePlayerMove, useMakeAiMove } from '@modules/Chess/hooks/useChess';
+import { useMakePlayerMove, useGetGame } from '@modules/Chess/hooks/useChess';
+import { useParams } from 'react-router';
+
 
 export const ChessBoard: React.FC = () => {
+    const { gameId } = useParams();
     const {
-        initGame,
         chessGame: gameData,
         error: initGameError,
-    } = useInitGame();
+        // @ts-ignore
+    } = useGetGame({game_id: gameId});
 
-    const {
-        makePlayerMove,
-        chessGame: playerMoveGameData,
-        error: playerMoveError,
-    } = useMakePlayerMove();
+    const { makePlayerMove } = useMakePlayerMove();
 
-    const {
-        makeAiMove,
-        chessGame: aiMoveGameData,
-        error: aiMoveError,
-    } = useMakeAiMove();
 
-    const [gameState, setGameState] = React.useState(gameData);
-
-    React.useEffect(() => {
-        if (playerMoveGameData) {
-            setGameState(playerMoveGameData);
-        }
-    }, [playerMoveGameData]);
-
-    React.useEffect(() => {
-        initGame();
-    }, []);
-
-    if (initGameError || playerMoveError || aiMoveError) {
+    if (initGameError) {
         return <div>There was an error...</div>;
     }
 
@@ -45,15 +27,21 @@ export const ChessBoard: React.FC = () => {
         makePlayerMove({
             game_id: gameData.game_id,
             move: sourceSquare + targetSquare,
+            player: gameData.current_player,
         });
-
+        setTimeout(() => {
+            makePlayerMove({
+                game_id: gameData.game_id,
+                player: 'black' ,
+            });
+        }, 100);
         return true;
     };
 
     return (
         <Chessboard
             id="BasicBoard"
-            position={gameState?.board_state}
+            position={gameData?.board_state}
             onPieceDrop={onPieceMove}
         />
     );

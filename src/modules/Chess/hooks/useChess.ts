@@ -1,62 +1,34 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { chessClient } from '../client/chessClient';
-import { ChessApi } from '../chess';
+import { cacheKeys } from '../config';
 
-
-type GetGameParams = {
-    id: number;
+export type Params = {
+    game_id: number;
 };
 
-export const useGetGame = (params: GetGameParams) => {
-    const queryClient = useQueryClient();
+export const useGetGame = (params: Params) => {
+
     const { data: chessGame, status, error } = useQuery(
-        ["getGame", params.id],
+
+        [cacheKeys.getGame],
         () => chessClient.getGame(params),
-        {
-            onSuccess: (data) => {
-                queryClient.setQueryData(['game', params.id], data);
-            }
-        }
     );
     return { chessGame, status, error };
 };
 
-export const useInitGame = () => {
-    const queryClient = useQueryClient();
-    const { mutate: initGame, data: chessGame, status, error } = useMutation(
-        chessClient.initGame,
-        {
-            onSuccess: (data) => {
-                queryClient.setQueryData(['game', data.game_id], data);
-            }
-        }
-    );
-    return { initGame, chessGame, status, error };
-};
-
 export const useMakePlayerMove = () => {
     const queryClient = useQueryClient();
-    const { mutate: makePlayerMove, data: chessGame, status, error } = useMutation(
-        chessClient.makePlayerMove,
-        {
-            onSuccess: (data, variables) => {
-                queryClient.invalidateQueries(['game', variables.game_id]);
-            }
-        }
-    );
-    return { makePlayerMove, chessGame, status, error };
-};
+    const makePlayerMove = useMutation(chessClient.makePlayerMove, {
+        mutationKey: [cacheKeys.makePlayerMove],
+        onSuccess: async (data, payload) => {
+            await queryClient.invalidateQueries([cacheKeys.getGame]);
+        },
+        onError: (e) => {
+            throw e;
+        },
+    });
 
-
-export const useMakeAiMove = () => {
-    const queryClient = useQueryClient();
-    const { mutate: makeAiMove, data: chessGame, status, error } = useMutation(
-        chessClient.makeAiMove,
-        {
-            onSuccess: (data, variables) => {
-                queryClient.invalidateQueries(['game', variables.game_id]);
-            }
-        }
-    );
-    return { makeAiMove, chessGame, status, error };
-};
+    return {
+        makePlayerMove: makePlayerMove.mutateAsync,
+    };
+}

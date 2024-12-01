@@ -49,7 +49,7 @@ export const Header: React.FC<Props> = ({ onNavigationClickRequest }) => {
         >
         {config.projectName}
           <img
-              src={`https://storage.googleapis.com/sidzinski-butler/waiter.png`}
+              src={`src/shared/imgs/waiter.png`}
               alt="logo"
               style={{
                 verticalAlign: 'middle',

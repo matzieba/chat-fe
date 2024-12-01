@@ -49,7 +49,7 @@ export const Root = () => {
         <Routes>
           <Route path={routes.home} element={<Main/>}/>
           <Route path={routes.chat()} element={<ViewChat/>}/>
-          <Route path={routes.chess} element={<ChessBoard/>}/>
+          <Route path={routes.chess()} element={<ChessBoard/>}/>
           <Route path="*" element={<Navigate to={routes.home}/>}/>
         </Routes>
       </Authenticated>
