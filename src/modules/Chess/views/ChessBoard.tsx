@@ -2,6 +2,7 @@ import React from 'react';
 import { Chessboard } from 'react-chessboard';
 import { useMakePlayerMove, useGetGame } from '@modules/Chess/hooks/useChess';
 import { useParams } from 'react-router';
+import {Grid} from "@mui/material";
 
 
 export const ChessBoard: React.FC = () => {
@@ -39,10 +40,25 @@ export const ChessBoard: React.FC = () => {
     };
 
     return (
-        <Chessboard
-            id="BasicBoard"
-            position={gameData?.board_state}
-            onPieceDrop={onPieceMove}
-        />
+        <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            style={{ minHeight: '100vh' }}
+        >
+            <Grid
+                item
+                xs={12}
+                sm={4}
+                style={{ textAlign: 'center' }}
+            >
+                <Chessboard
+                    id="BasicBoard"
+                    position={gameData?.board_state}
+                    onPieceDrop={onPieceMove}
+                />
+            </Grid>
+        </Grid>
     );
 };
