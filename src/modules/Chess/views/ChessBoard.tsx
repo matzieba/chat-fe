@@ -1,21 +1,31 @@
 import React from 'react';
 import { Chessboard } from 'react-chessboard';
-import { useMakePlayerMove, useGetGame } from '@modules/Chess/hooks/useChess';
-import { useParams } from 'react-router';
+import { useGameCrud, useGetGame } from '@modules/Chess/hooks/useChess';
+import { useParams, useNavigate } from 'react-router';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid} from "@mui/material";
 import {FeedbackContext} from "@cvt/contexts";
+import {UserContext} from "@modules/Users/contexts";
 
 
 export const ChessBoard: React.FC = () => {
     const { triggerFeedback } = React.useContext(FeedbackContext);
-    const { gameId } = useParams();
+    const navigate = useNavigate();
+    const initialGameId = useParams().gameId;
+    const [gameId, setGameId] = React.useState(initialGameId);
+    const { user } = React.useContext(UserContext);
+
+
     const {
         chessGame: gameData,
+        isLoading,
         error: initGameError,
         // @ts-ignore
     } = useGetGame({game_id: gameId});
 
-    const { makePlayerMove } = useMakePlayerMove();
+    console.log(gameData);
+    console.log(gameId);
+
+    const { updateGame, createGame, deleteGame } = useGameCrud();
 
     const [openPlayAgainDialog, setOpenPlayAgainDialog] = React.useState(false);
 
@@ -42,10 +52,6 @@ export const ChessBoard: React.FC = () => {
         return <div>There was an error...</div>;
     }
 
-    if (!gameData) {
-        return <div>Loading...</div>;
-    }
-
     const onPieceMove = (sourceSquare: string, targetSquare: string, piece: string) => {
 
         const isWhite = piece[0] === 'w';
@@ -55,13 +61,13 @@ export const ChessBoard: React.FC = () => {
             triggerFeedback({ message: 'You are not allowed to make moves for AI', severity: 'error' });
             return false;
         }
-        makePlayerMove({
+        updateGame({
             game_id: gameData.game_id,
             move: sourceSquare + targetSquare,
             player: gameData.current_player,
         });
         setTimeout(() => {
-            makePlayerMove({
+            updateGame({
                 game_id: gameData.game_id,
                 player: 'black' ,
             });
@@ -69,11 +75,12 @@ export const ChessBoard: React.FC = () => {
         return true;
     };
 
-    const startNewGame = () => {
-        // Add your logic to reset the board or start a new game
-        console.log('Starting a new game...');
+    const startNewGame = async () => {
+        await deleteGame({ game_id: gameId });
+        const newGame = await createGame({ human_player: user?.id });
+        setGameId(newGame.game_id)
+        navigate(`/chess/${newGame.game_id}`);
         setOpenPlayAgainDialog(false);
-        // This is where you would reset the game state or generate a new game ID
     };
 
     const handleCloseDialog = () => {
@@ -82,7 +89,7 @@ export const ChessBoard: React.FC = () => {
 
     return (
         <Grid container direction="row" justifyContent="center" alignItems="center">
-            <Grid item xs={12} sm={8} style={{ textAlign: 'center' }}>
+            <Grid item xs={12} sm={6} style={{ textAlign: 'center' }}>
                 <Chessboard id="BasicBoard" position={gameData?.board_state} onPieceDrop={onPieceMove} />
             </Grid>
 

@@ -1,6 +1,8 @@
 export const cacheKeys = {
     getGame: 'getGame',
-    makePlayerMove: 'makePlayerMove',
+    updateGame: 'updateGame',
+    createGame: 'createGame',
+    deleteGame: 'deleteGame',
 
 
 };

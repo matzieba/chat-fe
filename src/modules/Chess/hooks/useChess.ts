@@ -4,6 +4,7 @@ import { cacheKeys } from '../config';
 import {AxiosHeaders} from "axios";
 import React from "react";
 import {FeedbackContext} from "@cvt/contexts";
+import {ChessApi} from "@modules/Chess/chess";
 
 export type Params = {
     game_id: number;
@@ -11,12 +12,11 @@ export type Params = {
 
 export const useGetGame = (params: Params) => {
 
-    const { data: chessGame, status, error } = useQuery(
-
-        [cacheKeys.getGame],
+    const { data: chessGame, status, error, isLoading } = useQuery(
+        [cacheKeys.getGame, params],
         () => chessClient.getGame(params),
     );
-    return { chessGame, status, error };
+    return { chessGame, status, error, isLoading };
 };
 
 interface CustomError {
@@ -28,14 +28,27 @@ interface CustomError {
     };
 }
 
-export const useMakePlayerMove = () => {
+export const useGameCrud = () => {
 
     const queryClient = useQueryClient();
     const { triggerFeedback } = React.useContext(FeedbackContext);
     const { genericErrorFeedback } = React.useContext(FeedbackContext);
 
-    const makePlayerMove = useMutation(chessClient.makePlayerMove, {
-        mutationKey: [cacheKeys.makePlayerMove],
+    const createGame = useMutation((params: ChessApi.GameCrud) => chessClient.createGame(params), {
+        mutationKey: [cacheKeys.createGame],
+        onError: (error: CustomError) => {
+            genericErrorFeedback();
+            if (!!error.response.data.detail) {
+                triggerFeedback({
+                    severity: 'error',
+                    message: error.response.data.detail,
+                });
+            }
+        },
+    });
+
+    const updateGame = useMutation(chessClient.updateGame, {
+        mutationKey: [cacheKeys.updateGame],
         onSuccess: async (data, payload) => {
             await queryClient.invalidateQueries([cacheKeys.getGame]);
         },
@@ -50,7 +63,22 @@ export const useMakePlayerMove = () => {
         },
     });
 
+    const deleteGame = useMutation((params: {game_id: string | undefined}) => chessClient.deleteGame(params), {
+        mutationKey: [cacheKeys.deleteGame],
+        onError: (error: CustomError) => {
+            genericErrorFeedback();
+            if (!!error.response.data.detail) {
+                triggerFeedback({
+                    severity: 'error',
+                    message: error.response.data.detail,
+                });
+            }
+        },
+    });
+
     return {
-        makePlayerMove: makePlayerMove.mutateAsync,
+        updateGame: updateGame.mutateAsync,
+        createGame: createGame.mutateAsync,
+        deleteGame: deleteGame.mutateAsync,
     };
 }
