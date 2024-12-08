@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid} from "@mui/material";
 import {FeedbackContext} from "@cvt/contexts";
 import {UserContext} from "@modules/Users/contexts";
+import {isPast} from "date-fns";
 
 
 export const ChessBoard: React.FC = () => {
@@ -12,6 +13,7 @@ export const ChessBoard: React.FC = () => {
     const navigate = useNavigate();
     const initialGameId = useParams().gameId;
     const [gameId, setGameId] = React.useState(initialGameId);
+    const [isPromotion, setIsPromotion] = React.useState(false);
     const { user } = React.useContext(UserContext);
 
 
@@ -21,9 +23,6 @@ export const ChessBoard: React.FC = () => {
         error: initGameError,
         // @ts-ignore
     } = useGetGame({game_id: gameId});
-
-    console.log(gameData);
-    console.log(gameId);
 
     const { updateGame, createGame, deleteGame } = useGameCrud();
 
@@ -52,26 +51,51 @@ export const ChessBoard: React.FC = () => {
         return <div>There was an error...</div>;
     }
 
-    const onPieceMove = (sourceSquare: string, targetSquare: string, piece: string) => {
+    // @ts-ignore
+    const onPieceMove = (sourceSquare, targetSquare, piece) => {
+        // Check for pawn promotion
+        if (isPromotion) {
+            setIsPromotion(false); // Reset for next move
+            return false;
+        }
 
         const isWhite = piece[0] === 'w';
-
-        if ((isWhite && gameData.current_player.toLowerCase() !== 'white') ||
-            (!isWhite && gameData.current_player.toLowerCase() !== 'black')) {
+        if ((isWhite && gameData.current_player.toLowerCase() !== 'white') || (!isWhite && gameData.current_player.toLowerCase() !== 'black')) {
             triggerFeedback({ message: 'You are not allowed to make moves for AI', severity: 'error' });
             return false;
         }
+
         updateGame({
             game_id: gameData.game_id,
             move: sourceSquare + targetSquare,
             player: gameData.current_player,
+        }).then(() => {
+            setTimeout(() => {
+                updateGame({
+                    game_id: gameData.game_id,
+                    player: 'black',
+                });
+            }, 100);
         });
-        setTimeout(() => {
-            updateGame({
-                game_id: gameData.game_id,
-                player: 'black' ,
-            });
-        }, 100);
+        return true;
+    };
+
+    // @ts-ignore
+    const onPromotionCheck = (sourceSquare, targetSquare, piece) => {
+        setIsPromotion((piece === "wP" && targetSquare[1] === "8") || (piece === "bP" && targetSquare[1] === "1"));
+        return isPromotion;
+    };
+
+    // @ts-ignore
+    const onPromotionPieceSelect = (chosenPiece, promoteFromSquare, promoteToSquare) => {
+        if (!chosenPiece) return false;
+
+        // Perform the update with the promotion piece's name
+        updateGame({
+            game_id: gameData.game_id,
+            move: promoteFromSquare + promoteToSquare + "=" + chosenPiece,
+            player: gameData.current_player,
+        });
         return true;
     };
 
@@ -83,6 +107,13 @@ export const ChessBoard: React.FC = () => {
         setOpenPlayAgainDialog(false);
     };
 
+    const restartCurrentGame = async () => {
+        await deleteGame({ game_id: gameId });
+        const restartedGame = await createGame({ human_player: user?.id });
+        setGameId(restartedGame.game_id);
+        navigate(`/chess/${restartedGame.game_id}`);
+    };
+
     const handleCloseDialog = () => {
         setOpenPlayAgainDialog(false);
     };
@@ -90,7 +121,18 @@ export const ChessBoard: React.FC = () => {
     return (
         <Grid container direction="row" justifyContent="center" alignItems="center">
             <Grid item xs={12} sm={6} style={{ textAlign: 'center' }}>
-                <Chessboard id="BasicBoard" position={gameData?.board_state} onPieceDrop={onPieceMove} />
+                <Chessboard
+                    id="BasicBoard"
+                    position={gameData?.board_state}
+                    onPieceDrop={onPieceMove}
+                    onPromotionCheck={onPromotionCheck}
+                    onPromotionPieceSelect={onPromotionPieceSelect}
+                />
+            </Grid>
+            <Grid container direction="row" justifyContent="center" alignItems="center">
+                <Button onClick={startNewGame} color="inherit">
+                    Restart
+                </Button>
             </Grid>
 
             <Dialog
