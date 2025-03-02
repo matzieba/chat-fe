@@ -20,10 +20,8 @@ export const ChessBoard: React.FC = () => {
     const initialGameId = useParams().gameId;
     const [gameId, setGameId] = React.useState(initialGameId);
 
-    // Flag to indicate if the current move is a promotion
     const [isPromotion, setIsPromotion] = React.useState(false);
 
-    // Store from-square, to-square, and the piece being promoted (e.g. "wP" or "bP")
     const [promotionMove, setPromotionMove] = React.useState<{
         from: string;
         to: string;
@@ -61,38 +59,34 @@ export const ChessBoard: React.FC = () => {
         return <div>Loading...</div>;
     }
 
-    // 1) Called by Chessboard to detect if the drop is a promotion
     const onPromotionCheck = (
         sourceSquare: string,
         targetSquare: string,
         piece: string
     ) => {
-        // White pawn to rank 8, or black pawn to rank 1
+
         const isPromo = (
             (piece === 'wP' && targetSquare[1] === '8') ||
             (piece === 'bP' && targetSquare[1] === '1')
         );
         if (isPromo) {
             setIsPromotion(true);
-            // Store the squares/piece so we can finalize the move after user picks a promoted piece
             setPromotionMove({ from: sourceSquare, to: targetSquare, piece });
-            return true; // Tells Chessboard it's a promotion
+            return true;
         }
-        return false; // Not a promotion
+        return false;
     };
 
-    // 2) Called if onPromotionCheck returns false (i.e., normal move)
     const onPieceMove = (
         sourceSquare: string,
         targetSquare: string,
         piece: string
     ) => {
-        // If we are in promotion flow, don't submit a normal move
+
         if (isPromotion) {
             return false;
         }
 
-        // Ensure correct side is moving
         const isWhite = piece[0] === 'w';
         if (
             (isWhite && gameData.current_player.toLowerCase() !== 'white') ||
@@ -105,13 +99,12 @@ export const ChessBoard: React.FC = () => {
             return false;
         }
 
-        // Normal move, e.g. "e2e4"
         updateGame({
             game_id: gameData.game_id,
             move: sourceSquare + targetSquare,
             player: gameData.current_player,
         }).then(() => {
-            // Example: request AI move afterward
+
             setTimeout(() => {
                 updateGame({
                     game_id: gameData.game_id,
@@ -123,42 +116,38 @@ export const ChessBoard: React.FC = () => {
         return true;
     };
 
-    // 3) Called after user selects a piece to promote to (passed down by react-chessboard)
     const onPromotionPieceSelect = (chosenPiece: string) => {
         if (!promotionMove || !chosenPiece) {
             return false;
         }
 
-        // chosenPiece might look like "wQ", "bR", "Q", etc.
-        // Convert that to a single lowercase letter: "q", "r", "n", or "b"
         const pieceLetter = chosenPiece.slice(-1).toLowerCase();
 
-        // Build the final move: "a7a8r", "b2b1q", etc.
         const { from, to } = promotionMove;
         const finalMove = from + to + pieceLetter;
 
-        // Submit the promotion move
         updateGame({
             game_id: gameData.game_id,
             move: finalMove,
             player: gameData.current_player,
-        }).then(() => {
-            // Example: request black's move
-            setTimeout(() => {
-                updateGame({
+        })
+            .then(() => {
+                return updateGame({
                     game_id: gameData.game_id,
-                    player: 'black',
+                    player: "black",
                 });
-            }, 100);
-        }).finally(() => {
-            setIsPromotion(false);
-            setPromotionMove(null);
-        });
+            })
+            .catch((err) => {
+                console.error("Error updating game:", err);
+            })
+            .finally(() => {
+                setIsPromotion(false);
+                setPromotionMove(null);
+            });
 
         return true;
     };
 
-    // If the game ended, allow user to start a new one or close the dialog
     const startNewGame = async () => {
         await deleteGame({ game_id: gameId });
         const newGame = await createGame({ human_player: user?.id });
