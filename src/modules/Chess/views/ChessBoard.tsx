@@ -132,9 +132,10 @@ export const ChessBoard: React.FC = () => {
             player: gameData.current_player,
         })
             .then(() => {
+                const nextPlayer = gameData.current_player.toLowerCase() === "white" ? "black" : "white";
                 return updateGame({
                     game_id: gameData.game_id,
-                    player: "black",
+                    player: nextPlayer,
                 });
             })
             .catch((err) => {
