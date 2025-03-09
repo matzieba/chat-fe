@@ -117,11 +117,21 @@ export const ChessBoard: React.FC = () => {
     };
 
     const onPromotionPieceSelect = (chosenPiece: string) => {
-        if (!promotionMove || !chosenPiece) {
+        if (!promotionMove) {
             return false;
         }
 
-        const pieceLetter = chosenPiece.slice(-1).toLowerCase();
+        // If it's AI (black) promoting, always choose queen ('q'),
+        // otherwise use the piece chosen by the player.
+        let pieceLetter: string;
+        if (gameData.current_player.toLowerCase() === 'black') {
+            pieceLetter = 'q';
+        } else {
+            if (!chosenPiece) {
+                return false;
+            }
+            pieceLetter = chosenPiece.slice(-1).toLowerCase();
+        }
 
         const { from, to } = promotionMove;
         const finalMove = from + to + pieceLetter;
@@ -132,7 +142,8 @@ export const ChessBoard: React.FC = () => {
             player: gameData.current_player,
         })
             .then(() => {
-                const nextPlayer = gameData.current_player.toLowerCase() === "white" ? "black" : "white";
+                const nextPlayer =
+                    gameData.current_player.toLowerCase() === 'white' ? 'black' : 'white';
                 return updateGame({
                     game_id: gameData.game_id,
                     player: nextPlayer,
@@ -148,7 +159,6 @@ export const ChessBoard: React.FC = () => {
 
         return true;
     };
-
     const startNewGame = async () => {
         await deleteGame({ game_id: gameId });
         const newGame = await createGame({ human_player: user?.id });
