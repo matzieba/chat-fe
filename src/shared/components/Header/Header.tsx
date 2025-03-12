@@ -13,6 +13,7 @@ import config from '@shared/config';
 import { UserMenu } from './UserMenu';
 import { useNavigate } from 'react-router';
 import { routes } from '@shared/routes';
+import waiter from '@shared/imgs/waiter.png';
 
 type Props = {
   onNavigationClickRequest: () => void;
@@ -49,7 +50,7 @@ export const Header: React.FC<Props> = ({ onNavigationClickRequest }) => {
         >
         {config.projectName}
           <img
-              src={`src/shared/imgs/waiter.png`}
+              src={waiter}
               alt="logo"
               style={{
                 verticalAlign: 'middle',
