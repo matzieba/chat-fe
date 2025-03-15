@@ -100,7 +100,7 @@ export const ChessBoard: React.FC = () => {
         piece: string
     ) => {
         if (isPromotion) {
-            // If we are mid-promotion flow, disallow further normal moves
+
             return false;
         }
 
@@ -243,7 +243,7 @@ export const ChessBoard: React.FC = () => {
 
     return (
         <Grid container direction="row" justifyContent="center" alignItems="center">
-            <Grid item xs={12} sm={6} style={{ textAlign: 'center' }}>
+            <Grid item xs={12} sm={6} style={{ textAlign: 'center', width: '100%', maxWidth: '600px', margin: '0 auto'  }}>
                 <Chessboard
                     id="BasicBoard"
                     position={localFen}
