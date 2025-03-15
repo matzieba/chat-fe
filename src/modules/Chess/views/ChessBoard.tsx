@@ -13,14 +13,17 @@ import {
 } from "@mui/material";
 import { FeedbackContext } from "@cvt/contexts";
 import { UserContext } from "@modules/Users/contexts";
-
-import { Chess } from 'chess.js'
+import { Chess } from 'chess.js';
 
 export const ChessBoard: React.FC = () => {
     const { triggerFeedback } = React.useContext(FeedbackContext);
     const navigate = useNavigate();
     const initialGameId = useParams().gameId;
     const [gameId, setGameId] = React.useState(initialGameId);
+
+// Keep track of a local error string, if needed.
+// That might be displayed in the UI or used for logs.
+    const [moveError, setMoveError] = React.useState<string>("");
 
     const [isPromotion, setIsPromotion] = React.useState(false);
     const [promotionMove, setPromotionMove] = React.useState<{
@@ -30,7 +33,6 @@ export const ChessBoard: React.FC = () => {
     } | null>(null);
 
     const { user } = React.useContext(UserContext);
-
 
     const {
         chessGame: gameData,
@@ -43,14 +45,13 @@ export const ChessBoard: React.FC = () => {
 
     const [openPlayAgainDialog, setOpenPlayAgainDialog] = React.useState(false);
 
-// 2) Create a local chess.js instance and a local board state
+// Local chess.js instance + local board FEN
     const [localChess, setLocalChess] = React.useState<Chess>(() => new Chess());
     const [localFen, setLocalFen] = React.useState<string>(localChess.fen());
 
-// 3) Whenever the server's board state changes, sync localChess
+// Sync local chess.js state with server board state
     React.useEffect(() => {
         if (gameData?.board_state) {
-            // Load the server's FEN into localChess
             const newChess = new Chess();
             newChess.load(gameData.board_state);
             setLocalChess(newChess);
@@ -98,12 +99,12 @@ export const ChessBoard: React.FC = () => {
         targetSquare: string,
         piece: string
     ) => {
-        // If we’re in the midst of a promotion, skip:
         if (isPromotion) {
+            // If we are mid-promotion flow, disallow further normal moves
             return false;
         }
 
-        // Check if it's truly your turn (not AI’s turn, etc.)
+        // Ensure it's truly the player's turn
         const isWhiteMove = piece.startsWith('w');
         const currentPlayer = gameData.current_player.toLowerCase();
         if (
@@ -114,41 +115,37 @@ export const ChessBoard: React.FC = () => {
                 message: 'You are not allowed to make moves for AI.',
                 severity: 'error'
             });
-            return false;
+            return false; // Snap the piece back
         }
 
-        // 4) Local move-validation with chess.js
-        const moveObject = {
-            from: sourceSquare,
-            to: targetSquare,
-            // Note: If it might be a promotion, normally pass promotion: 'q' or whatever user chooses
-        };
-        const attempt = localChess.move(moveObject);
+        // Local validation with chess.js
+        const attempt = localChess.move({ from: sourceSquare, to: targetSquare });
 
         if (attempt === null) {
-            // Invalid move according to chess.js
+            // Illegal move
+            setMoveError("Illegal move");  // You could also show in your UI
             triggerFeedback({
-                message: 'Invalid move!',
+                message: 'Illegal move!',
                 severity: 'error'
             });
-            // Revert localChess to server’s FEN just to be safe:
-            localChess.load(gameData.board_state);
-            setLocalFen(localChess.fen());
+            // Force piece to snap back
             return false;
         }
 
-        // 5) If valid, update the UI optimistically
+        // Otherwise, the local move is legal. Show it on the board optimistically.
         setLocalFen(localChess.fen());
 
-        // 6) Send the move to the server
-        //    If the server rejects it, revert the local state
+        // Clear any previous error
+        setMoveError("");
+
+        // Send the move to the server
         updateGame({
             game_id: gameData.game_id,
             move: sourceSquare + targetSquare,
             player: gameData.current_player,
         })
             .then(() => {
-                // Example: Make the AI move if it’s the next to move
+                // Possibly trigger the AI move or next player
                 setTimeout(() => {
                     updateGame({
                         game_id: gameData.game_id,
@@ -162,7 +159,7 @@ export const ChessBoard: React.FC = () => {
                     message: 'Server rejected move. Reverting...',
                     severity: 'error'
                 });
-                // Revert local board to server’s state
+                // Revert to server's board
                 localChess.load(gameData.board_state);
                 setLocalFen(localChess.fen());
             });
@@ -170,15 +167,9 @@ export const ChessBoard: React.FC = () => {
         return true;
     };
 
-// 7) If we do have a promotion piece chosen, handle it similarly,
-//    with localChess handling the actual "promotion" move and
-//    then sending it optimistically to the server.
-
     const onPromotionPieceSelect = (chosenPiece: string) => {
         if (!promotionMove) return false;
 
-        // If it's AI (black) promoting, always choose queen ('q'),
-        // otherwise use the piece chosen by the player.
         let pieceLetter: string;
         if (gameData.current_player.toLowerCase() === 'black') {
             pieceLetter = 'q';
@@ -190,7 +181,7 @@ export const ChessBoard: React.FC = () => {
         const { from, to } = promotionMove;
         const finalMove = from + to + pieceLetter;
 
-        // Attempt local move with chess.js
+        // Attempt local promotion move
         const attempt = localChess.move({
             from,
             to,
@@ -208,10 +199,8 @@ export const ChessBoard: React.FC = () => {
             return false;
         }
 
-        // Optimistically update board
         setLocalFen(localChess.fen());
 
-        // Send to server
         updateGame({
             game_id: gameData.game_id,
             move: finalMove,
@@ -235,6 +224,7 @@ export const ChessBoard: React.FC = () => {
                 setIsPromotion(false);
                 setPromotionMove(null);
             });
+
         return true;
     };
 
@@ -250,13 +240,12 @@ export const ChessBoard: React.FC = () => {
         setOpenPlayAgainDialog(false);
     };
 
+
     return (
         <Grid container direction="row" justifyContent="center" alignItems="center">
             <Grid item xs={12} sm={6} style={{ textAlign: 'center' }}>
                 <Chessboard
                     id="BasicBoard"
-                    // 8) Set the board’s displayed position to localFen,
-                    //    which is updated optimistically
                     position={localFen}
                     onPieceDrop={onPieceMove}
                     onPromotionCheck={onPromotionCheck}
