@@ -3083,6 +3083,11 @@ check-error@^1.0.2:
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
   integrity sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==
 
+chess.js@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/chess.js/-/chess.js-1.1.0.tgz#25a100e38f423ae4838a7d9321bfa5532ba4a618"
+  integrity sha512-IfdeaJnpdU1LddIenp36O7Fz19nIxk3x4cznwo2Qf25T1XSeP85XRBrjWUsSpk1RpDeXdijraoLxXt3PCaudVg==
+
 clear@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/clear/-/clear-0.1.0.tgz#b81b1e03437a716984fd7ac97c87d73bdfe7048a"
