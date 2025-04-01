@@ -10,20 +10,23 @@ import { MainLayout } from '@shared/components/layouts/MainLayout';
 import { Dialogs } from '@shared/components/Dialogs';
 
 import { Root } from '@pages/Root';
+import {FeedbackProvider} from "@cvt/contexts";
 
 const App = () => {
   return (
     <CVTApp>
-      <AuthProvider>
-        <UserProvider>
-          <CompanyProvider>
-            <MainLayout>
-              <Root />
-              <Dialogs />
-            </MainLayout>
-          </CompanyProvider>
-        </UserProvider>
-      </AuthProvider>
+      <FeedbackProvider>
+        <AuthProvider>
+          <UserProvider>
+            <CompanyProvider>
+              <MainLayout>
+                <Root />
+                <Dialogs />
+              </MainLayout>
+            </CompanyProvider>
+          </UserProvider>
+        </AuthProvider>
+      </FeedbackProvider>
     </CVTApp>
   );
 };

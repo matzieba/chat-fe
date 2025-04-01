@@ -21,8 +21,6 @@ export const ChessBoard: React.FC = () => {
     const initialGameId = useParams().gameId;
     const [gameId, setGameId] = React.useState(initialGameId);
 
-// Keep track of a local error string, if needed.
-// That might be displayed in the UI or used for logs.
     const [moveError, setMoveError] = React.useState<string>("");
 
     const [isPromotion, setIsPromotion] = React.useState(false);
@@ -45,11 +43,9 @@ export const ChessBoard: React.FC = () => {
 
     const [openPlayAgainDialog, setOpenPlayAgainDialog] = React.useState(false);
 
-// Local chess.js instance + local board FEN
     const [localChess, setLocalChess] = React.useState<Chess>(() => new Chess());
     const [localFen, setLocalFen] = React.useState<string>(localChess.fen());
 
-// Sync local chess.js state with server board state
     React.useEffect(() => {
         if (gameData?.board_state) {
             const newChess = new Chess();
@@ -104,7 +100,6 @@ export const ChessBoard: React.FC = () => {
             return false;
         }
 
-        // Ensure it's truly the player's turn
         const isWhiteMove = piece.startsWith('w');
         const currentPlayer = gameData.current_player.toLowerCase();
         if (
@@ -118,34 +113,18 @@ export const ChessBoard: React.FC = () => {
             return false; // Snap the piece back
         }
 
-        // Local validation with chess.js
-        const attempt = localChess.move({ from: sourceSquare, to: targetSquare });
+        localChess.move({ from: sourceSquare, to: targetSquare });
 
-        if (attempt === null) {
-            // Illegal move
-            setMoveError("Illegal move");  // You could also show in your UI
-            triggerFeedback({
-                message: 'Illegal move!',
-                severity: 'error'
-            });
-            // Force piece to snap back
-            return false;
-        }
-
-        // Otherwise, the local move is legal. Show it on the board optimistically.
         setLocalFen(localChess.fen());
 
-        // Clear any previous error
         setMoveError("");
 
-        // Send the move to the server
         updateGame({
             game_id: gameData.game_id,
             move: sourceSquare + targetSquare,
             player: gameData.current_player,
         })
             .then(() => {
-                // Possibly trigger the AI move or next player
                 setTimeout(() => {
                     updateGame({
                         game_id: gameData.game_id,
@@ -207,12 +186,12 @@ export const ChessBoard: React.FC = () => {
             player: gameData.current_player,
         })
             .then(() => {
-                const nextPlayer =
-                    gameData.current_player.toLowerCase() === 'white' ? 'black' : 'white';
-                return updateGame({
-                    game_id: gameData.game_id,
-                    player: nextPlayer,
-                });
+                // const nextPlayer =
+                //     gameData.current_player.toLowerCase() === 'white' ? 'black' : 'white';
+                // return updateGame({
+                //     game_id: gameData.game_id,
+                //     player: nextPlayer,
+                // });
             })
             .catch((err) => {
                 console.error("Error updating game:", err);
