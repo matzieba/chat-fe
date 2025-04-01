@@ -4,6 +4,8 @@ import { styled } from '@mui/system';
 import { routes } from "@shared/routes";
 import { useNavigate } from "react-router";
 import { AuthContext } from '@modules/Auth/contexts';
+import deer from '@shared/imgs/deer_1.png';
+import chleb from '@shared/imgs/img.png';
 
 const StyledImage = styled('img')({
     width: '60%',
@@ -28,7 +30,7 @@ export const Main: React.FC = () => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        if (user) {navigate(routes.chat(user.chatId))}
+        if (user) {navigate(routes.chess(user.gameId))}
     }
 
 
@@ -45,7 +47,7 @@ export const Main: React.FC = () => {
                 <h1 style={{textAlign: 'center'}}>
                     Sidzina Chess World Open Series 2024
                     <img
-                        src={`https://storage.googleapis.com/sidzinski-butler/deer_1.png`}
+                        src={deer}
                         alt="logo"
                         style={{
                             verticalAlign: 'middle',
@@ -59,7 +61,7 @@ export const Main: React.FC = () => {
                 <p style={{textAlign: 'center', margin: '2rem'}}>Yo! Yo! Jeżeli chcesz się znaleźć na miejscu Chlebiego,
                     klikaj!</p>
                 <ImageButton onClick={handleClick}>
-                    <StyledImage src="https://storage.googleapis.com/sidzinski-butler/img.png" alt="description"/>
+                    <StyledImage src={chleb} alt="description"/>
                 </ImageButton>
             </Box>
         </Container>

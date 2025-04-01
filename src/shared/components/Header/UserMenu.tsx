@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Brightness4, Brightness7, Logout, Translate } from '@mui/icons-material';
+import { Brightness4, Brightness7, Logout, Translate, VideogameAsset } from '@mui/icons-material';
 import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 
 import { LocalizationContext } from '@cvt/contexts';
@@ -87,6 +87,14 @@ export const UserMenu: React.FC<Props> = ({ children, anchorEl, onCloseRequest }
                 <ListItemIcon><Translate/></ListItemIcon>
                 <ListItemText primary='Chat with Butler' />
               </MenuItem>
+
+          )}
+          {user && (
+              <MenuItem onClick={() => [navigate(routes.chess(user.gameId)), onCloseRequest()]}>
+                <ListItemIcon><VideogameAsset/></ListItemIcon>
+                <ListItemText primary='Play against Butler' />
+              </MenuItem>
+
           )}
           <NavigationItem
             item={{
