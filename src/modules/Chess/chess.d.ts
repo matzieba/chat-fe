@@ -20,6 +20,7 @@ export namespace ChessApi {
         game_id?: string | undefined;
         move?: string;
         player?: string | undefined;
+        action?: string | undefined;
     }
 
 }

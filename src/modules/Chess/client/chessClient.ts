@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { request } from '@cvt/clients/baseClient';
 import {ChessApi} from '../chess';
 
-const chessApiBaseUrl = import.meta.env.VITE__CVT_API_URL;
+const chessApiBaseUrl = import.meta.env.VITE__CVT_CHESS_API_URL;
 
 const getGame = (params: { game_id: number | string }): Promise<ChessApi.GameApiResponse> => {
 
