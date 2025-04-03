@@ -9,11 +9,14 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Grid
+    Grid,
+    Select,
+    MenuItem
 } from "@mui/material";
 import { FeedbackContext } from "@cvt/contexts";
 import { UserContext } from "@modules/Users/contexts";
 import { Chess } from 'chess.js';
+import { ChessClock } from './ChessClock';
 
 export const ChessBoard: React.FC = () => {
     const { triggerFeedback } = React.useContext(FeedbackContext);
@@ -22,7 +25,6 @@ export const ChessBoard: React.FC = () => {
     const [gameId, setGameId] = React.useState(initialGameId);
 
     const [moveError, setMoveError] = React.useState<string>("");
-
     const [isPromotion, setIsPromotion] = React.useState(false);
     const [promotionMove, setPromotionMove] = React.useState<{
         from: string;
@@ -31,6 +33,7 @@ export const ChessBoard: React.FC = () => {
     } | null>(null);
 
     const { user } = React.useContext(UserContext);
+
 
     const {
         chessGame: gameData,
@@ -45,6 +48,13 @@ export const ChessBoard: React.FC = () => {
 
     const [localChess, setLocalChess] = React.useState<Chess>(() => new Chess());
     const [localFen, setLocalFen] = React.useState<string>(localChess.fen());
+
+    const [firstMoveMade, setFirstMoveMade] = React.useState(false);
+
+    const [selectedTime, setSelectedTime] = React.useState<number>(5); // default to 5 min
+    const handleTimeControlChange = (event: any) => {
+        setSelectedTime(event.target.value);
+    };
 
     React.useEffect(() => {
         if (gameData?.board_state) {
@@ -66,12 +76,31 @@ export const ChessBoard: React.FC = () => {
     }, [gameData?.game_status, triggerFeedback]);
 
     if (initGameError) {
-        return <div>There was an error...</div>;
+        return <div>There was an error loading the game...</div>;
     }
 
     if (!gameData) {
         return <div>Loading...</div>;
     }
+
+    const handleTimeOut = async (side: 'white' | 'black') => {
+        triggerFeedback({
+            message: `${side.toUpperCase()} ran out of time!`,
+            severity: 'info',
+        });
+
+        try {
+            await updateGame({
+                game_id: gameData.game_id,
+                player: side,
+                action: 'timeout',
+            });
+        } catch (err) {
+            console.error('Error updating game for timeout:', err);
+        }
+
+        setOpenPlayAgainDialog(true);
+    };
 
     const onPromotionCheck = (
         sourceSquare: string,
@@ -96,35 +125,38 @@ export const ChessBoard: React.FC = () => {
         piece: string
     ) => {
         if (isPromotion) {
-
             return false;
         }
 
         const isWhiteMove = piece.startsWith('w');
         const currentPlayer = gameData.current_player.toLowerCase();
+
         if (
             (isWhiteMove && currentPlayer !== 'white') ||
             (!isWhiteMove && currentPlayer !== 'black')
         ) {
             triggerFeedback({
-                message: 'You are not allowed to make moves for AI.',
+                message: 'You are not allowed to move for the AI.',
                 severity: 'error'
             });
-            return false; // Snap the piece back
+            return false; // snap back
+        }
+
+        if (!firstMoveMade && isWhiteMove) {
+            setFirstMoveMade(true);
         }
 
         localChess.move({ from: sourceSquare, to: targetSquare });
-
         setLocalFen(localChess.fen());
-
         setMoveError("");
 
         updateGame({
             game_id: gameData.game_id,
             move: sourceSquare + targetSquare,
-            player: gameData.current_player,
+            player: gameData.current_player
         })
             .then(() => {
+                // Optionally trigger an AI move
                 setTimeout(() => {
                     updateGame({
                         game_id: gameData.game_id,
@@ -135,10 +167,9 @@ export const ChessBoard: React.FC = () => {
             .catch((err) => {
                 console.error('Server rejected move:', err);
                 triggerFeedback({
-                    message: 'Server rejected move. Reverting...',
+                    message: 'Server rejected move. Reverting to server state...',
                     severity: 'error'
                 });
-                // Revert to server's board
                 localChess.load(gameData.board_state);
                 setLocalFen(localChess.fen());
             });
@@ -160,7 +191,6 @@ export const ChessBoard: React.FC = () => {
         const { from, to } = promotionMove;
         const finalMove = from + to + pieceLetter;
 
-        // Attempt local promotion move
         const attempt = localChess.move({
             from,
             to,
@@ -183,19 +213,11 @@ export const ChessBoard: React.FC = () => {
         updateGame({
             game_id: gameData.game_id,
             move: finalMove,
-            player: gameData.current_player,
+            player: gameData.current_player
         })
-            .then(() => {
-                // const nextPlayer =
-                //     gameData.current_player.toLowerCase() === 'white' ? 'black' : 'white';
-                // return updateGame({
-                //     game_id: gameData.game_id,
-                //     player: nextPlayer,
-                // });
-            })
             .catch((err) => {
-                console.error("Error updating game:", err);
-                // Revert local changes
+                console.error('Error updating game:', err);
+                // revert local state
                 localChess.load(gameData.board_state);
                 setLocalFen(localChess.fen());
             })
@@ -211,18 +233,44 @@ export const ChessBoard: React.FC = () => {
         await deleteGame({ game_id: gameId });
         const newGame = await createGame({ human_player: user?.id });
         setGameId(newGame.game_id);
-        navigate(`/chess/${newGame.game_id}`);
+
         setOpenPlayAgainDialog(false);
+        setFirstMoveMade(false);
+
+        navigate(`/chess/${newGame.game_id}`);
     };
 
     const handleCloseDialog = () => {
         setOpenPlayAgainDialog(false);
     };
 
-
     return (
         <Grid container direction="row" justifyContent="center" alignItems="center">
-            <Grid item xs={12} sm={6} style={{ textAlign: 'center', width: '100%', maxWidth: '600px', margin: '0 auto'  }}>
+            <Grid item xs={12} style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                <Select
+                    value={selectedTime}
+                    onChange={handleTimeControlChange}
+                    style={{ marginRight: '1rem' }}
+                >
+                    <MenuItem value={5}>5 Minutes</MenuItem>
+                    <MenuItem value={8}>8 Minutes</MenuItem>
+                    <MenuItem value={10}>10 Minutes</MenuItem>
+                </Select>
+                <Button onClick={startNewGame} color="inherit">
+                    New Game
+                </Button>
+            </Grid>
+
+            <ChessClock
+                gameId={gameId}
+                currentPlayer={gameData.current_player.toLowerCase() as 'white' | 'black'}
+                isGameOngoing={gameData.game_status === 'ongoing'}
+                selectedTime={selectedTime}
+                onTimeOut={handleTimeOut}
+                firstMoveMade={firstMoveMade}
+            />
+
+            <Grid item xs={12} sm={6} style={{ textAlign: 'center', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
                 <Chessboard
                     id="BasicBoard"
                     position={localFen}
@@ -248,7 +296,10 @@ export const ChessBoard: React.FC = () => {
                 <DialogTitle id="alert-dialog-title">{"Game Over"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        The game ended as {gameData?.game_status}. Would you like to play again?
+                        {gameData?.game_status && gameData.game_status !== 'ongoing'
+                            ? `The game ended as ${gameData.game_status}.`
+                            : 'A player ran out of time!'}
+                        Would you like to play again?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
