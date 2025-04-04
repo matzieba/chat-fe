@@ -230,7 +230,6 @@ export const ChessBoard: React.FC = () => {
     };
 
     const startNewGame = async () => {
-        await deleteGame({ game_id: gameId });
         const newGame = await createGame({ human_player: user?.id });
         setGameId(newGame.game_id);
 
@@ -280,13 +279,6 @@ export const ChessBoard: React.FC = () => {
                     onPromotionPieceSelect={onPromotionPieceSelect}
                 />
             </Grid>
-
-            <Grid container direction="row" justifyContent="center" alignItems="center">
-                <Button onClick={startNewGame} color="inherit">
-                    Restart
-                </Button>
-            </Grid>
-
             <Dialog
                 open={openPlayAgainDialog}
                 onClose={handleCloseDialog}

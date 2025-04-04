@@ -23,4 +23,13 @@ export namespace ChessApi {
         action?: string | undefined;
     }
 
+    export interface PlayerStatistics {
+        id?: string | undefined;
+        first_name?: string | undefined;
+        last_name?: string| undefined;
+        win_rate?: string | undefined;
+        total_games?: string | undefined;
+        wins?: string | undefined;
+    }
+
 }

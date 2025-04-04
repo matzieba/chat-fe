@@ -3,6 +3,7 @@ export const cacheKeys = {
     updateGame: 'updateGame',
     createGame: 'createGame',
     deleteGame: 'deleteGame',
+    getGames: 'getGames',
 
 
 };
