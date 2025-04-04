@@ -82,13 +82,13 @@ export const UserMenu: React.FC<Props> = ({ children, anchorEl, onCloseRequest }
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <Authenticated>
-          {user && (
-              <MenuItem onClick={() => [navigate(routes.chat(user.chatId)), onCloseRequest()]}>
-                <ListItemIcon><Translate/></ListItemIcon>
-                <ListItemText primary='Chat with Butler' />
-              </MenuItem>
+          {/*{user && (*/}
+          {/*    <MenuItem onClick={() => [navigate(routes.chat(user.chatId)), onCloseRequest()]}>*/}
+          {/*      <ListItemIcon><Translate/></ListItemIcon>*/}
+          {/*      <ListItemText primary='Chat with Butler' />*/}
+          {/*    </MenuItem>*/}
 
-          )}
+          {/*)}*/}
           {user && (
               <MenuItem onClick={() => [navigate(routes.chess(user.gameId)), onCloseRequest()]}>
                 <ListItemIcon><VideogameAsset/></ListItemIcon>

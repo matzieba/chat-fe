@@ -19,6 +19,15 @@ export const useGetGame = (params: Params) => {
     return { chessGame, status, error, isLoading };
 };
 
+export const useGetGames = () => {
+
+    const { data: statistics, status, error, isLoading } = useQuery(
+        [cacheKeys.getGames],
+        () => chessClient.getGames(),
+    );
+    return { statistics, status, error, isLoading };
+};
+
 interface CustomError {
     response: {
         headers: AxiosHeaders,
