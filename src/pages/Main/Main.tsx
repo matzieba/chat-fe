@@ -72,9 +72,6 @@ export const Main: React.FC = () => {
                                     {stat.first_name}
                                 </Box>
                                 <Box component="td" p="0.5rem 1rem">
-                                    {stat.last_name}
-                                </Box>
-                                <Box component="td" p="0.5rem 1rem">
                                     {stat.wins}
                                 </Box>
                                 <Box component="td" p="0.5rem 1rem">
