@@ -48,9 +48,7 @@ export const Main: React.FC = () => {
                 </h1>
 
                 {/* Display your table */}
-                <Box component="table" border="1px solid #ccc" sx={{
-                    width: '100%',
-                }}>
+                <Box component="table" border="1px solid #ccc">
                     <Box component="thead">
                         <Box component="tr">
                             <Box component="th" p="0.5rem 1rem">
