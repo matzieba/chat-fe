@@ -91,7 +91,7 @@ export const Main: React.FC = () => {
                     </Box>
                 </Box>
 
-                <Button onClick={handleClick} color="inherit" variant="contained" style={{ textAlign: 'center', margin: '2rem' }}>
+                <Button onClick={handleClick} color="secondary" variant="contained" style={{ textAlign: 'center', margin: '2rem' }}>
                     Let's play some fkn Chess!
                 </Button>
             </Box>
