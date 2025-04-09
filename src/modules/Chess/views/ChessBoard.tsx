@@ -17,8 +17,11 @@ import { FeedbackContext } from "@cvt/contexts";
 import { UserContext } from "@modules/Users/contexts";
 import { Chess } from 'chess.js';
 import { ChessClock } from './ChessClock';
+import { useQueryClient } from "@tanstack/react-query";
+import { cacheKeys } from '../config';
 
 export const ChessBoard: React.FC = () => {
+    const queryClient = useQueryClient();
     const { triggerFeedback } = React.useContext(FeedbackContext);
     const navigate = useNavigate();
     const initialGameId = useParams().gameId;
@@ -214,6 +217,9 @@ export const ChessBoard: React.FC = () => {
             game_id: gameData.game_id,
             move: finalMove,
             player: gameData.current_player
+        })
+            .then(()=>{
+            queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
         })
             .catch((err) => {
                 console.error('Error updating game:', err);
