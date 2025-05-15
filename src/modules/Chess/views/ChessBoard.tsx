@@ -165,6 +165,7 @@ export const ChessBoard: React.FC = () => {
                         game_id: gameData.game_id,
                         player: 'black',
                     });
+                    queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
                 }, 100);
             })
             .catch((err) => {
