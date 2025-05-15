@@ -165,7 +165,6 @@ export const ChessBoard: React.FC = () => {
                         player: 'black',
                     });
                 }, 100);
-                queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
             })
             .catch((err) => {
                 console.error('Server rejected move:', err);
@@ -219,7 +218,6 @@ export const ChessBoard: React.FC = () => {
             player: gameData.current_player
         })
             .then(()=>{
-            queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
         })
             .catch((err) => {
                 console.error('Error updating game:', err);
@@ -231,7 +229,7 @@ export const ChessBoard: React.FC = () => {
                 setIsPromotion(false);
                 setPromotionMove(null);
             });
-
+        queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
         return true;
     };
 
