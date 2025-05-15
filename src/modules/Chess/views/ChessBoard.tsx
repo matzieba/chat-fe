@@ -159,14 +159,13 @@ export const ChessBoard: React.FC = () => {
             player: gameData.current_player
         })
             .then(() => {
-                // Optionally trigger an AI move
                 setTimeout(() => {
                     updateGame({
                         game_id: gameData.game_id,
                         player: 'black',
                     });
-                    queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
                 }, 100);
+                queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
             })
             .catch((err) => {
                 console.error('Server rejected move:', err);
