@@ -59,12 +59,18 @@ export const ChessBoard: React.FC = () => {
         setSelectedTime(event.target.value);
     };
 
+    const lastBoardStateRef = React.useRef<string | null>(null);
+
     React.useEffect(() => {
-        if (gameData?.board_state) {
+        if (gameData?.board_state && gameData.board_state !== lastBoardStateRef.current) {
+            lastBoardStateRef.current = gameData.board_state;
+
             const newChess = new Chess();
             newChess.load(gameData.board_state);
             setLocalChess(newChess);
             setLocalFen(newChess.fen());
+            setIsPromotion(false);
+            setPromotionMove(null);
         }
     }, [gameData?.board_state]);
 
@@ -128,7 +134,8 @@ export const ChessBoard: React.FC = () => {
         piece: string
     ) => {
         if (isPromotion) {
-            return false;
+            setIsPromotion(false);
+            setPromotionMove(null);
         }
 
         const isWhiteMove = piece.startsWith('w');
@@ -142,14 +149,19 @@ export const ChessBoard: React.FC = () => {
                 message: 'You are not allowed to move for the AI.',
                 severity: 'error'
             });
-            return false; // snap back
+            return false;
         }
 
         if (!firstMoveMade && isWhiteMove) {
             setFirstMoveMade(true);
         }
 
-        localChess.move({ from: sourceSquare, to: targetSquare });
+        const moveResult = localChess.move({ from: sourceSquare, to: targetSquare });
+
+        if (moveResult === null) {
+            return false;
+        }
+
         setLocalFen(localChess.fen());
         setMoveError("");
 
@@ -158,13 +170,22 @@ export const ChessBoard: React.FC = () => {
             move: sourceSquare + targetSquare,
             player: gameData.current_player
         })
-            .then(() => {
-                setTimeout(() => {
-                    updateGame({
-                        game_id: gameData.game_id,
-                        player: 'black',
-                    });
-                }, 100);
+            .then((response) => {
+                if (currentPlayer === 'white') {
+                    setTimeout(() => {
+                        updateGame({
+                            game_id: gameData.game_id,
+                            player: 'black',
+                        }).then(aiResponse => {
+                            if (aiResponse.board_state) {
+                                const newChess = new Chess();
+                                newChess.load(aiResponse.board_state);
+                                setLocalChess(newChess);
+                                setLocalFen(newChess.fen());
+                            }
+                        });
+                    }, 100);
+                }
             })
             .catch((err) => {
                 console.error('Server rejected move:', err);
@@ -180,6 +201,10 @@ export const ChessBoard: React.FC = () => {
     };
 
     const onPromotionPieceSelect = (chosenPiece: string) => {
+        if (!isPromotion) {
+            setIsPromotion(true);
+        }
+
         if (!promotionMove) return false;
 
         let pieceLetter: string;
@@ -192,7 +217,6 @@ export const ChessBoard: React.FC = () => {
 
         const { from, to } = promotionMove;
         const finalMove = from + to + pieceLetter;
-
         const attempt = localChess.move({
             from,
             to,
@@ -211,14 +235,28 @@ export const ChessBoard: React.FC = () => {
         }
 
         setLocalFen(localChess.fen());
-
         updateGame({
             game_id: gameData.game_id,
             move: finalMove,
             player: gameData.current_player
         })
-            .then(()=>{
-        })
+            .then((response) => {
+                if (gameData.current_player.toLowerCase() === 'white') {
+                    setTimeout(() => {
+                        updateGame({
+                            game_id: gameData.game_id,
+                            player: 'black',
+                        }).then(aiResponse => {
+                            if (aiResponse.board_state) {
+                                const newChess = new Chess();
+                                newChess.load(aiResponse.board_state);
+                                setLocalChess(newChess);
+                                setLocalFen(newChess.fen());
+                            }
+                        });
+                    }, 100);
+                }
+            })
             .catch((err) => {
                 console.error('Error updating game:', err);
                 // revert local state
@@ -230,7 +268,10 @@ export const ChessBoard: React.FC = () => {
                 setPromotionMove(null);
             });
         queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
-        queryClient.refetchQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
+        queryClient.refetchQueries([cacheKeys.getGame, { game_id: gameData.game_id }])
+            .then(() => {
+            });
+
         return true;
     };
 
