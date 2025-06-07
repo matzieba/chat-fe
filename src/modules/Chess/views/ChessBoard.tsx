@@ -18,10 +18,8 @@ import { UserContext } from "@modules/Users/contexts";
 import { Chess } from 'chess.js';
 import { ChessClock } from './ChessClock';
 import { useQueryClient } from "@tanstack/react-query";
-import { cacheKeys } from '../config';
 
 export const ChessBoard: React.FC = () => {
-    const queryClient = useQueryClient();
     const { triggerFeedback } = React.useContext(FeedbackContext);
     const navigate = useNavigate();
     const initialGameId = useParams().gameId;
@@ -45,7 +43,7 @@ export const ChessBoard: React.FC = () => {
         // @ts-ignore
     } = useGetGame({ game_id: gameId! });
 
-    const { updateGame, createGame, deleteGame } = useGameCrud();
+    const { updateGame, createGame } = useGameCrud();
 
     const [openPlayAgainDialog, setOpenPlayAgainDialog] = React.useState(false);
 
@@ -267,11 +265,6 @@ export const ChessBoard: React.FC = () => {
                 setIsPromotion(false);
                 setPromotionMove(null);
             });
-        queryClient.invalidateQueries([cacheKeys.getGame, { game_id: gameData.game_id }]);
-        queryClient.refetchQueries([cacheKeys.getGame, { game_id: gameData.game_id }])
-            .then(() => {
-            });
-
         return true;
     };
 
